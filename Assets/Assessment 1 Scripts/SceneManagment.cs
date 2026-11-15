@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 
 public class SceneManagment : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         StartCoroutine(C_LoadSceneAsync(1, LoadSceneMode.Additive));
@@ -22,10 +22,6 @@ public class SceneManagment : MonoBehaviour
             Debug.Log($"Progress: {asyncLoad.progress * 100}");
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }
 
