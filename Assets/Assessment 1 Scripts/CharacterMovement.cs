@@ -1,6 +1,7 @@
 using System.Data.Common;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -75,6 +76,11 @@ public class CharacterMovement : MonoBehaviour
 	private void FixedUpdate()
 	{
 		m_RB.linearVelocityX = m_MoveSpeed * m_InMove;
+
+        if (Input.GetKeyUp("space") && m_RB.linearVelocityY > 0f )
+        {
+            m_RB.linearVelocityY = m_RB.linearVelocityY * 0.4f ;
+        }
 
         m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
 
