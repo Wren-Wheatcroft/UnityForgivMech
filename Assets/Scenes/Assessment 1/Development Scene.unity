@@ -2315,6 +2315,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 929667974029550097, guid: 3357c003e0755d64c8b53ac23d3acd15, type: 3}
+      propertyPath: m_CoyoteTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 929667974029550097, guid: 3357c003e0755d64c8b53ac23d3acd15, type: 3}
+      propertyPath: m_JumpStrength
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1667636342438995758, guid: 3357c003e0755d64c8b53ac23d3acd15, type: 3}
       propertyPath: m_Name
       value: PlayerPrefab
