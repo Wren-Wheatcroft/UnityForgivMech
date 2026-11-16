@@ -24,6 +24,9 @@ public class CharacterMovement : MonoBehaviour
 	[SerializeField] private float m_JumpStrength;
 	[SerializeField] private Transform m_RaycastPosition;
 	[SerializeField] private LayerMask m_GroundLayer;
+    [SerializeField] private bool m_HasJumped;
+    [SerializeField] private bool m_JumpedPressed;
+
 	private float m_InMove;
     private PlayerControls m_ActionMap;
     private bool m_IsGrounded;
@@ -43,9 +46,13 @@ public class CharacterMovement : MonoBehaviour
     {
         m_ActionMap.Enable();
 
-        m_ActionMap.Default.MoveHoriz.performed += Handle_MovePerformed;
-        m_ActionMap.Default.MoveHoriz.canceled += Handle_MoveCancelled;
-        m_ActionMap.Default.Jump.performed += Handle_JumpPerformed;
+         m_ActionMap.Default.MoveHoriz.performed += Handle_MovePerformed;
+         m_ActionMap.Default.MoveHoriz.canceled += Handle_MoveCancelled;
+         m_ActionMap.Default.Sprint.performed += Handle_SprintPerformed;
+         m_ActionMap.Default.Sprint.canceled += Handle_SprintCancelled;
+         m_ActionMap.Default.Jump.performed += Handle_JumpPerformed;
+         m_ActionMap.Default.Jump.canceled += Handle_JumpCancelled;
+       
     }
 
     private void OnDisable()
@@ -54,7 +61,11 @@ public class CharacterMovement : MonoBehaviour
 
         m_ActionMap.Default.MoveHoriz.performed -= Handle_MovePerformed;
         m_ActionMap.Default.MoveHoriz.canceled -= Handle_MoveCancelled;
+        m_ActionMap.Default.Sprint.performed -= Handle_SprintPerformed;
+        m_ActionMap.Default.Sprint.canceled -= Handle_SprintCancelled;
         m_ActionMap.Default.Jump.performed -= Handle_JumpPerformed;
+        m_ActionMap.Default.Jump.canceled -= Handle_JumpCancelled;
+       
     }
     #endregion
 
@@ -63,6 +74,16 @@ public class CharacterMovement : MonoBehaviour
     private void Handle_MovePerformed(InputAction.CallbackContext context)
     {
         m_InMove = context.ReadValue<float>();
+
+        if(m_InMove > 0)
+        {
+             m_SpriteRenderer.flipX = false; 
+        }
+
+        if(m_InMove < 0)
+        {
+             m_SpriteRenderer.flipX = true; 
+        }
     }
     private void Handle_MoveCancelled(InputAction.CallbackContext context)
     {
@@ -71,62 +92,75 @@ public class CharacterMovement : MonoBehaviour
 
     private void Handle_JumpPerformed(InputAction.CallbackContext context)
     {
+
+        m_JumpedPressed = true;
+        m_HasJumped = true;
         if (m_IsGrounded)
         {
             m_RB.AddForce(Vector2.up * m_JumpStrength, ForceMode2D.Impulse);
+            
         }
+
+      
+       
+        
+            m_JumpBufferCounter = m_JumpBufferTime;
+        
+    
     }
+
+    private void Handle_JumpCancelled(InputAction.CallbackContext context)
+    {
+     m_JumpedPressed = false;
+
+    }
+
+    private void Handle_SprintPerformed(InputAction.CallbackContext context)
+    {
+            m_IsRunning = true;
+             m_Animator.SetBool("IsRunning", m_IsRunning);
+             m_MoveSpeed = 10;
+    }
+
+    private void Handle_SprintCancelled(InputAction.CallbackContext context)
+    {
+            m_IsRunning = false;
+             m_Animator.SetBool("IsRunning", m_IsRunning);
+             m_MoveSpeed = 5;
+    }
+
     #endregion
 
 
 	private void FixedUpdate()
 	{
 
+        if(m_RB.linearVelocityY < 1 && m_RB.linearVelocityY > -1 || !m_JumpedPressed && m_HasJumped)
+        {
+            m_RB.gravityScale = 3;
+        }
+        if (m_JumpBufferCounter > 0f && m_CoyoteTimeCounter > 0f)
+        {
+            m_CoyoteTimeCounter = 0f;
+            m_CoyoteTimeCounter = 0f;
+        }
+
         if (m_IsGrounded)
         {
             m_CoyoteTimeCounter = m_CoyoteTime;
+            m_RB.gravityScale = 1;
         }
         else
         {
             m_CoyoteTimeCounter -= Time.deltaTime;
+            m_JumpBufferCounter -= Time.deltaTime;
         }
 
 		m_RB.linearVelocityX = m_MoveSpeed * m_InMove;
 
-        if (Input.GetKeyUp("space") && m_RB.linearVelocityY > 0f )
-        {
-            m_RB.linearVelocityY = m_RB.linearVelocityY * 0.4f ;
-        }
-        if (m_JumpBufferCounter > 0f && m_CoyoteTimeCounter > 0f)
-        {
-            m_RB.linearVelocityY = m_JumpStrength;
-            m_CoyoteTimeCounter = 0f;
-            m_CoyoteTimeCounter = 0f;
-        }
-        if (Input.GetKeyDown("space"))
-        {
-            m_JumpBufferCounter = m_JumpBufferTime;
-        }
-        else
-        {
-            m_JumpBufferCounter -= Time.deltaTime;
-        }
-
+        
         m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
 
-        if (Input.GetKey("left shift") || Input.GetKey("right shift"))
-        {
-            m_IsRunning = true;
-             m_Animator.SetBool("IsRunning", m_IsRunning);
-             m_MoveSpeed = 10;
-        }
-        else 
-        {
-            m_IsRunning = false;
-             m_Animator.SetBool("IsRunning", m_IsRunning);
-             m_MoveSpeed = 5;
-
-        }
 
         if (m_InMove !=0 && !m_IsTurning)
         {
@@ -138,17 +172,7 @@ public class CharacterMovement : MonoBehaviour
             }
   
         }
-    
-    if (Input.GetKey("d"))
-        {
-            Debug.Log ("D");
-            m_SpriteRenderer.flipX = false; // face right
-        }
-        else if (Input.GetKey("a"))
-        {
-            Debug.Log ("A");
-            m_SpriteRenderer.flipX = true; // face left
-        }
+
     // animator paraneters
     m_Animator.SetFloat("Speed", Mathf.Abs(m_InMove));
     m_Animator.SetFloat("YVelocity", m_RB.linearVelocityY);
