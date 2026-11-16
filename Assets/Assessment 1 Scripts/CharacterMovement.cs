@@ -3,7 +3,9 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -13,6 +15,10 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float m_LastMoveDirection;
     [SerializeField] private float m_FacingDirection;
     [SerializeField] private bool m_IsTurning;
+    [SerializeField] private float m_CoyoteTime = 0.2f;
+    [SerializeField] private float m_CoyoteTimeCounter;
+    [SerializeField] private float m_JumpBufferTime;
+    [SerializeField] private float m_JumpBufferCounter;
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] private bool m_IsRunning;
 	[SerializeField] private float m_JumpStrength;
@@ -75,11 +81,35 @@ public class CharacterMovement : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+
+        if (m_IsGrounded)
+        {
+            m_CoyoteTimeCounter = m_CoyoteTime;
+        }
+        else
+        {
+            m_CoyoteTimeCounter -= Time.deltaTime;
+        }
+
 		m_RB.linearVelocityX = m_MoveSpeed * m_InMove;
 
         if (Input.GetKeyUp("space") && m_RB.linearVelocityY > 0f )
         {
             m_RB.linearVelocityY = m_RB.linearVelocityY * 0.4f ;
+        }
+        if (m_JumpBufferCounter > 0f && m_CoyoteTimeCounter > 0f)
+        {
+            m_RB.linearVelocityY = m_JumpStrength;
+            m_CoyoteTimeCounter = 0f;
+            m_CoyoteTimeCounter = 0f;
+        }
+        if (Input.GetKeyDown("space"))
+        {
+            m_JumpBufferCounter = m_JumpBufferTime;
+        }
+        else
+        {
+            m_JumpBufferCounter -= Time.deltaTime;
         }
 
         m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
