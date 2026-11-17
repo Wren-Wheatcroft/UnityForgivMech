@@ -10,8 +10,8 @@ using UnityEngine.Rendering;
 public class CharacterMovement : MonoBehaviour
 {
 	private Rigidbody2D m_RB;
-    private Animator m_Animator;
-	[SerializeField] private float m_MoveSpeed;
+    public Animator m_Animator;
+	[SerializeField] public float m_MoveSpeed;
     [SerializeField] private float m_LastMoveDirection;
     [SerializeField] private float m_FacingDirection;
     [SerializeField] private bool m_IsTurning;
@@ -20,16 +20,22 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float m_JumpBufferTime;
     [SerializeField] private float m_JumpBufferCounter;
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
-    [SerializeField] private bool m_IsRunning;
+    [SerializeField] public bool m_IsRunning;
 	[SerializeField] private float m_JumpStrength;
 	[SerializeField] private Transform m_RaycastPosition;
 	[SerializeField] private LayerMask m_GroundLayer;
     [SerializeField] private bool m_HasJumped;
     [SerializeField] private bool m_JumpedPressed;
+    public bool m_IsGrounded;
+    public bool m_SlideActivate;
+
+    public Vector2 m_CrouchSize;
+    public Vector2 m_RegSize;
+
 
 	private float m_InMove;
     private PlayerControls m_ActionMap;
-    private bool m_IsGrounded;
+
 
     private void Awake()
     {
@@ -37,7 +43,6 @@ public class CharacterMovement : MonoBehaviour
 		m_RB = GetComponent<Rigidbody2D>();
         m_Animator = GetComponent<Animator>();
         m_SpriteRenderer = transform.Find("Sprite").GetComponentInChildren<SpriteRenderer>();
-
         
     }
 
@@ -52,6 +57,8 @@ public class CharacterMovement : MonoBehaviour
          m_ActionMap.Default.Sprint.canceled += Handle_SprintCancelled;
          m_ActionMap.Default.Jump.performed += Handle_JumpPerformed;
          m_ActionMap.Default.Jump.canceled += Handle_JumpCancelled;
+
+
        
     }
 
@@ -65,7 +72,7 @@ public class CharacterMovement : MonoBehaviour
         m_ActionMap.Default.Sprint.canceled -= Handle_SprintCancelled;
         m_ActionMap.Default.Jump.performed -= Handle_JumpPerformed;
         m_ActionMap.Default.Jump.canceled -= Handle_JumpCancelled;
-       
+   
     }
     #endregion
 

@@ -164,6 +164,8 @@ GameObject:
   - component: {fileID: 929667974029550097}
   - component: {fileID: 6553778537628869737}
   - component: {fileID: 6847103773693425129}
+  - component: {fileID: 5700882493621877698}
+  - component: {fileID: 5898093517669545230}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -186,7 +188,6 @@ Transform:
   m_Children:
   - {fileID: 5816422030429470223}
   - {fileID: 6338369817138996045}
-  - {fileID: 5406072704542687043}
   - {fileID: 6897197163652072766}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -229,6 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3de5457bbdd14e842b5a6928e26b3331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Animator: {fileID: 6553778537628869737}
   m_MoveSpeed: 5
   m_LastMoveDirection: 0
   m_FacingDirection: 0
@@ -237,7 +239,7 @@ MonoBehaviour:
   m_CoyoteTimeCounter: 0
   m_JumpBufferTime: 0
   m_JumpBufferCounter: 0
-  m_SpriteRenderer: {fileID: 0}
+  m_SpriteRenderer: {fileID: 6847103773693425129}
   m_IsRunning: 0
   m_JumpStrength: 10
   m_RaycastPosition: {fileID: 5816422030429470223}
@@ -246,6 +248,10 @@ MonoBehaviour:
     m_Bits: 8
   m_HasJumped: 0
   m_JumpedPressed: 0
+  m_IsGrounded: 0
+  m_SlideActivate: 0
+  m_CrouchSize: {x: 0, y: 0}
+  m_RegSize: {x: 0, y: 0}
 --- !u!95 &6553778537628869737
 Animator:
   serializedVersion: 7
@@ -327,45 +333,28 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!1 &2062927974038001864
-GameObject:
+--- !u!114 &5700882493621877698
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5406072704542687043}
-  - component: {fileID: 4855070989235704345}
-  m_Layer: 0
-  m_Name: Collider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5406072704542687043
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2062927974038001864}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3600401525870630746}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &4855070989235704345
+  m_GameObject: {fileID: 1667636342438995758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7614ecdc53a4fc4c9c27fd386facc3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Slide
+  m_PlayerMoveVars: {fileID: 929667974029550097}
+  m_Animator: {fileID: 6553778537628869737}
+  capsule: {fileID: 5898093517669545230}
+--- !u!70 &5898093517669545230
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2062927974038001864}
+  m_GameObject: {fileID: 1667636342438995758}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -394,7 +383,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 1.5, y: 2}
   m_Direction: 0
 --- !u!1 &3457566451066791912
 GameObject:
@@ -559,7 +548,7 @@ Transform:
   m_GameObject: {fileID: 6013075500262283774}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.34, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -650,7 +639,7 @@ Transform:
   m_GameObject: {fileID: 8966865185367729238}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.098, y: -0.813, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
