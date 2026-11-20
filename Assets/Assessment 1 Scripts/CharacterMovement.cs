@@ -19,7 +19,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float m_CoyoteTime = 0.2f;
     [SerializeField] private float m_CoyoteTimeCounter;
     [SerializeField] private float m_JumpBufferTime;
-    [SerializeField] private float m_JumpBufferCounter;
+    [SerializeField] private float m_JumpBufferCounter = 0.5f;
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] public bool m_IsRunning;
 	[SerializeField] private float m_JumpStrength;
@@ -29,12 +29,23 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private bool m_JumpedPressed;
     [SerializeField] public float m_JumpCounter;
     private Coroutine m_CoyoteTimeCoroutine;
+    [SerializeField] private ParticleSystem  m_LandingParticles;
     public bool m_wasGrounded;
     public bool m_IsGrounded;
     public bool m_SlideActivate;
 
     public Vector2 m_CrouchSize;
     public Vector2 m_RegSize;
+
+    [SerializeField] private bool m_IsDashing;
+    [SerializeField] private bool m_CanDash = true;
+    [SerializeField] private float m_OgGravity;       
+    [SerializeField] private float m_DashDirection; 
+    [SerializeField] private float m_DashSpeed;
+    [SerializeField] public float m_DashDuration;
+    [SerializeField] public float m_DashCooldown;
+    private Coroutine m_DashCoroutine;
+
 
 
 	private float m_InMove;
@@ -61,6 +72,10 @@ public class CharacterMovement : MonoBehaviour
          m_ActionMap.Default.Sprint.canceled += Handle_SprintCancelled;
          m_ActionMap.Default.Jump.performed += Handle_JumpPerformed;
          m_ActionMap.Default.Jump.canceled += Handle_JumpCancelled;
+         m_ActionMap.Default.Dash.performed += Handle_DashPerformed;
+         m_ActionMap.Default.Dash.canceled += Handle_DashCancelled;
+
+
 
 
        
@@ -76,6 +91,9 @@ public class CharacterMovement : MonoBehaviour
         m_ActionMap.Default.Sprint.canceled -= Handle_SprintCancelled;
         m_ActionMap.Default.Jump.performed -= Handle_JumpPerformed;
         m_ActionMap.Default.Jump.canceled -= Handle_JumpCancelled;
+        m_ActionMap.Default.Dash.performed += Handle_DashPerformed;
+        m_ActionMap.Default.Dash.canceled += Handle_DashCancelled;
+
    
     }
     #endregion
@@ -93,6 +111,7 @@ public class CharacterMovement : MonoBehaviour
             m_CoyoteTimeCoroutine = null;
          }
          m_IsGrounded = false ;
+         m_HasJumped = true;
 
     }
     private void Handle_MovePerformed(InputAction.CallbackContext context)
@@ -131,7 +150,8 @@ public class CharacterMovement : MonoBehaviour
             Jump();
         }
         
-    
+            Debug.Log("Jump Buffer Counting:" + m_JumpBufferCounter); 
+
     }
 
     private void Handle_JumpCancelled(InputAction.CallbackContext context)
@@ -154,7 +174,51 @@ public class CharacterMovement : MonoBehaviour
              m_MoveSpeed = 5;
     }
 
-    #endregion
+    private void Handle_DashPerformed(InputAction.CallbackContext context)
+    {
+        if (m_CanDash && !m_IsDashing)
+        {
+            m_DashCoroutine = StartCoroutine(Dash());
+        }
+
+    }
+    private void Handle_DashCancelled(InputAction.CallbackContext context)
+    {
+
+
+    }
+
+        
+        
+        #endregion
+
+    private IEnumerator Dash()
+    {
+        m_IsDashing = true;
+        m_CanDash = false;
+        m_OgGravity = m_RB.gravityScale;
+        m_RB.gravityScale = 0;
+
+        if (m_SpriteRenderer.flipX == true)
+        {
+            m_DashDirection = -1;
+        }
+        else
+        {
+            m_DashDirection = 1;
+        }
+
+        m_RB.linearVelocity = new Vector2(m_DashDirection * m_DashSpeed, 0);
+        yield return new WaitForSeconds (m_DashDuration);
+
+        m_RB.gravityScale = m_OgGravity;
+        m_IsDashing = false;
+
+        yield return new WaitForSeconds (m_DashCooldown);
+        m_CanDash = true;
+        m_DashCoroutine = null;
+
+    }
     private IEnumerator CoyoteTime()
     {
         m_CoyoteTimeCounter = m_CoyoteTime;
@@ -166,14 +230,22 @@ public class CharacterMovement : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+
+
+        m_wasGrounded = m_IsGrounded;
+
         m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
+
+
+        if(!m_wasGrounded && m_IsGrounded)
+        {
+            m_LandingParticles.Play();
+        }
 
         if(m_RB.linearVelocityY < 1 && m_RB.linearVelocityY > -1 || !m_JumpedPressed && m_HasJumped)
         {
             m_RB.gravityScale = 3;
         }
-
-        bool m_wasGrounded = m_IsGrounded;
         
         // Coyote TIme
         if (m_wasGrounded && !m_IsGrounded && m_CoyoteTimeCoroutine ==null)
@@ -197,7 +269,7 @@ public class CharacterMovement : MonoBehaviour
             m_JumpBufferCounter -= Time.deltaTime;
         }
     
-        if (m_JumpBufferCounter > 0f && m_CoyoteTimeCounter > 0f)
+        if (m_JumpBufferCounter > 0f && ( m_IsGrounded || m_CoyoteTimeCounter > 0f))
         {
            Jump();
         }
@@ -210,10 +282,12 @@ public class CharacterMovement : MonoBehaviour
         {
             m_CoyoteTimeCounter -= Time.deltaTime;
         }
-		m_RB.linearVelocityX = m_MoveSpeed * m_InMove;
+		if (!m_IsDashing)
+        {
+             m_RB.linearVelocityX = m_MoveSpeed * m_InMove;
 
+        }
         
-
 
         if (m_InMove !=0 && !m_IsTurning)
         {
