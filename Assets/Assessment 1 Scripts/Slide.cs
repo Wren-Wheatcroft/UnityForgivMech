@@ -52,7 +52,7 @@ public class Slide : MonoBehaviour
         if (m_PlayerMoveVars.m_IsRunning && m_PlayerMoveVars.m_IsGrounded)
         {
             m_PlayerMoveVars.m_SlideActivate = true;
-            m_PlayerMoveVars.m_MoveSpeed += 5f;
+            m_PlayerMoveVars.m_MoveSpeed = 15f;
             capsule.size = m_PlayerMoveVars.m_CrouchSize;
         }
 

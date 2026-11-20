@@ -1,3 +1,4 @@
+using System;
 using System.Data.Common;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
@@ -30,6 +31,8 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] public float m_JumpCounter;
     private Coroutine m_CoyoteTimeCoroutine;
     [SerializeField] private ParticleSystem  m_LandingParticles;
+    [SerializeField] private ParticleSystem  m_LandingParticlesOnLand;
+    [SerializeField] private ParticleSystem  m_DashParticles;
     public bool m_wasGrounded;
     public bool m_IsGrounded;
     public bool m_SlideActivate;
@@ -112,6 +115,8 @@ public class CharacterMovement : MonoBehaviour
          }
          m_IsGrounded = false ;
          m_HasJumped = true;
+         m_LandingParticles.Play();
+
 
     }
     private void Handle_MovePerformed(InputAction.CallbackContext context)
@@ -179,6 +184,8 @@ public class CharacterMovement : MonoBehaviour
         if (m_CanDash && !m_IsDashing)
         {
             m_DashCoroutine = StartCoroutine(Dash());
+            m_DashParticles.Play();
+
         }
 
     }
@@ -228,7 +235,16 @@ public class CharacterMovement : MonoBehaviour
         m_JumpCounter = 0f;
     }
 
-	private void FixedUpdate()
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (Mathf.RoundToInt(other.GetContact(0).normal.y) == 1)
+        {
+            m_LandingParticlesOnLand.Play();
+
+        }
+    }
+
+    private void FixedUpdate()
 	{
 
 
@@ -237,11 +253,7 @@ public class CharacterMovement : MonoBehaviour
         m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
 
 
-        if(!m_wasGrounded && m_IsGrounded)
-        {
-            m_LandingParticles.Play();
-        }
-
+  
         if(m_RB.linearVelocityY < 1 && m_RB.linearVelocityY > -1 || !m_JumpedPressed && m_HasJumped)
         {
             m_RB.gravityScale = 3;
