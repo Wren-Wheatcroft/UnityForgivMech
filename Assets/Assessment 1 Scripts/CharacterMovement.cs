@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using System.Collections;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -26,6 +27,9 @@ public class CharacterMovement : MonoBehaviour
 	[SerializeField] private LayerMask m_GroundLayer;
     [SerializeField] private bool m_HasJumped;
     [SerializeField] private bool m_JumpedPressed;
+    [SerializeField] public float m_JumpCounter;
+    private Coroutine m_CoyoteTimeCoroutine;
+    public bool m_wasGrounded;
     public bool m_IsGrounded;
     public bool m_SlideActivate;
 
@@ -77,7 +81,20 @@ public class CharacterMovement : MonoBehaviour
     #endregion
 
     #region InputFunctions
+    private void Jump()
+    {
+         m_RB.AddForce(Vector2.up * m_JumpStrength, ForceMode2D.Impulse);
+         m_CoyoteTimeCounter = 0f;
+         m_JumpBufferCounter = 0f;
+         
+         if (m_CoyoteTimeCoroutine != null)
+         {
+            StopCoroutine(m_CoyoteTimeCoroutine);
+            m_CoyoteTimeCoroutine = null;
+         }
+         m_IsGrounded = false ;
 
+    }
     private void Handle_MovePerformed(InputAction.CallbackContext context)
     {
         m_InMove = context.ReadValue<float>();
@@ -99,19 +116,20 @@ public class CharacterMovement : MonoBehaviour
 
     private void Handle_JumpPerformed(InputAction.CallbackContext context)
     {
+        Debug.Log("Jump");
 
         m_JumpedPressed = true;
         m_HasJumped = true;
-        if (m_IsGrounded)
-        {
-            m_RB.AddForce(Vector2.up * m_JumpStrength, ForceMode2D.Impulse);
-            
-        }
+        m_JumpCounter = 1;
+       
 
       
-       
+        m_JumpBufferCounter = m_JumpBufferTime;
         
-            m_JumpBufferCounter = m_JumpBufferTime;
+        if (m_IsGrounded || m_CoyoteTimeCounter > 0f && m_JumpCounter <= 0f) 
+        {
+            Jump();
+        }
         
     
     }
@@ -137,36 +155,64 @@ public class CharacterMovement : MonoBehaviour
     }
 
     #endregion
-
+    private IEnumerator CoyoteTime()
+    {
+        m_CoyoteTimeCounter = m_CoyoteTime;
+        yield return new WaitForSeconds(m_CoyoteTime);
+        m_CoyoteTimeCounter =0f;
+        m_CoyoteTimeCoroutine = null;
+        m_JumpCounter = 0f;
+    }
 
 	private void FixedUpdate()
 	{
+        m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
 
         if(m_RB.linearVelocityY < 1 && m_RB.linearVelocityY > -1 || !m_JumpedPressed && m_HasJumped)
         {
             m_RB.gravityScale = 3;
         }
+
+        bool m_wasGrounded = m_IsGrounded;
+        
+        // Coyote TIme
+        if (m_wasGrounded && !m_IsGrounded && m_CoyoteTimeCoroutine ==null)
+        {
+            m_CoyoteTimeCoroutine = StartCoroutine(CoyoteTime());
+
+        }
+        if (m_IsGrounded)
+        {
+            if (m_CoyoteTimeCoroutine != null)
+            {
+                StopCoroutine(m_CoyoteTimeCoroutine);
+                m_CoyoteTimeCoroutine = null;
+            }
+            m_CoyoteTimeCounter = m_CoyoteTime;
+
+        }
+        //jump buffer
+        if (m_JumpBufferCounter > 0f)
+        {
+            m_JumpBufferCounter -= Time.deltaTime;
+        }
+    
         if (m_JumpBufferCounter > 0f && m_CoyoteTimeCounter > 0f)
         {
-            m_CoyoteTimeCounter = 0f;
-            m_CoyoteTimeCounter = 0f;
+           Jump();
         }
 
         if (m_IsGrounded)
         {
-            m_CoyoteTimeCounter = m_CoyoteTime;
-            m_RB.gravityScale = 1;
+          m_RB.gravityScale = 1;
         }
-        else
+        if (!m_IsGrounded)
         {
             m_CoyoteTimeCounter -= Time.deltaTime;
-            m_JumpBufferCounter -= Time.deltaTime;
         }
-
 		m_RB.linearVelocityX = m_MoveSpeed * m_InMove;
 
         
-        m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
 
 
         if (m_InMove !=0 && !m_IsTurning)
@@ -184,6 +230,7 @@ public class CharacterMovement : MonoBehaviour
     m_Animator.SetFloat("Speed", Mathf.Abs(m_InMove));
     m_Animator.SetFloat("YVelocity", m_RB.linearVelocityY);
     m_Animator.SetBool("IsGrounded", m_IsGrounded);
+
 
     }
 
