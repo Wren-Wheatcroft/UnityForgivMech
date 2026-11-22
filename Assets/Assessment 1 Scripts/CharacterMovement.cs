@@ -11,12 +11,18 @@ using System.Collections;
 
 public class CharacterMovement : MonoBehaviour
 {
+    #region Variables!
+[Header("Components")]
 	private Rigidbody2D m_RB;
     public Animator m_Animator;
+
+    [Header("Movement")]
 	[SerializeField] public float m_MoveSpeed;
     [SerializeField] private float m_LastMoveDirection;
     [SerializeField] private float m_FacingDirection;
     [SerializeField] private bool m_IsTurning;
+
+    [Header("Jump")]
     [SerializeField] private float m_CoyoteTime = 0.2f;
     [SerializeField] private float m_CoyoteTimeCounter;
     [SerializeField] private float m_JumpBufferTime;
@@ -30,16 +36,22 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private bool m_JumpedPressed;
     [SerializeField] public float m_JumpCounter;
     private Coroutine m_CoyoteTimeCoroutine;
+
+    [Header("Particles")]
     [SerializeField] private ParticleSystem  m_LandingParticles;
     [SerializeField] private ParticleSystem  m_LandingParticlesOnLand;
     [SerializeField] private ParticleSystem  m_DashParticles;
+    
+    [Header("Ground Detection")]
     public bool m_wasGrounded;
     public bool m_IsGrounded;
-    public bool m_SlideActivate;
 
+    [Header("Crouch & Slide")]
+    public bool m_SlideActivate;
     public Vector2 m_CrouchSize;
     public Vector2 m_RegSize;
 
+[Header("Dash")]
     [SerializeField] private bool m_IsDashing;
     [SerializeField] private bool m_CanDash = true;
     [SerializeField] private float m_OgGravity;       
@@ -49,20 +61,25 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] public float m_DashCooldown;
     private Coroutine m_DashCoroutine;
 
-
-
+[Header("Corner Correction")]
+[SerializeField] private Collider2D m_PlayerCollider;
+[SerializeField] public float m_CornerCorrectionAmount = 0.075f;
+[SerializeField] private int m_CornerCorrectionSteps =5;
+private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
 	private float m_InMove;
     private PlayerControls m_ActionMap;
 
-
+ #endregion
+ #region Awake
     private void Awake()
     {
         m_ActionMap = new PlayerControls();
 		m_RB = GetComponent<Rigidbody2D>();
         m_Animator = GetComponent<Animator>();
         m_SpriteRenderer = transform.Find("Sprite").GetComponentInChildren<SpriteRenderer>();
-        
+        m_PlayerCollider = GetComponent<CapsuleCollider2D>();
     }
+    #endregion
 
     #region Bindings
     private void OnEnable()
@@ -94,14 +111,13 @@ public class CharacterMovement : MonoBehaviour
         m_ActionMap.Default.Sprint.canceled -= Handle_SprintCancelled;
         m_ActionMap.Default.Jump.performed -= Handle_JumpPerformed;
         m_ActionMap.Default.Jump.canceled -= Handle_JumpCancelled;
-        m_ActionMap.Default.Dash.performed += Handle_DashPerformed;
-        m_ActionMap.Default.Dash.canceled += Handle_DashCancelled;
+        m_ActionMap.Default.Dash.performed -= Handle_DashPerformed;
+        m_ActionMap.Default.Dash.canceled -= Handle_DashCancelled;
 
    
     }
     #endregion
-
-    #region InputFunctions
+#region Jump
     private void Jump()
     {
          m_RB.AddForce(Vector2.up * m_JumpStrength, ForceMode2D.Impulse);
@@ -116,9 +132,30 @@ public class CharacterMovement : MonoBehaviour
          m_IsGrounded = false ;
          m_HasJumped = true;
          m_LandingParticles.Play();
+         CornerCorrection(Vector2.right * m_InMove);
 
 
+#endregion
     }
+    #region Corner Correction
+    private void CornerCorrection(Vector2 direction)
+    {
+        for (int i = 1; i<= m_CornerCorrectionSteps; i++)
+        {
+            float offset = m_CornerCorrectionAmount*i;
+            Vector2 correctionOffset = direction.normalized * offset;
+
+            int hitCount = m_PlayerCollider.Cast(direction.normalized, m_CornerHits, offset + 0.01f);
+            if (hitCount == 0)
+            {
+                m_RB.position += correctionOffset;
+                break;
+            }
+        }
+    }
+    #endregion
+        #region InputFunctions
+
     private void Handle_MovePerformed(InputAction.CallbackContext context)
     {
         m_InMove = context.ReadValue<float>();
@@ -199,6 +236,7 @@ public class CharacterMovement : MonoBehaviour
         
         #endregion
 
+#region Dash
     private IEnumerator Dash()
     {
         m_IsDashing = true;
@@ -224,8 +262,11 @@ public class CharacterMovement : MonoBehaviour
         yield return new WaitForSeconds (m_DashCooldown);
         m_CanDash = true;
         m_DashCoroutine = null;
+        CornerCorrection(Vector2.up);
 
     }
+    #endregion
+    #region Coyote Time
     private IEnumerator CoyoteTime()
     {
         m_CoyoteTimeCounter = m_CoyoteTime;
@@ -234,7 +275,8 @@ public class CharacterMovement : MonoBehaviour
         m_CoyoteTimeCoroutine = null;
         m_JumpCounter = 0f;
     }
-
+    #endregion
+#region land Particles
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (Mathf.RoundToInt(other.GetContact(0).normal.y) == 1)
@@ -243,7 +285,9 @@ public class CharacterMovement : MonoBehaviour
 
         }
     }
-
+    #endregion
+#region Update
+#endregion
     private void FixedUpdate()
 	{
 
@@ -259,7 +303,7 @@ public class CharacterMovement : MonoBehaviour
             m_RB.gravityScale = 3;
         }
         
-        // Coyote TIme
+#region CotyoteTimeActivate
         if (m_wasGrounded && !m_IsGrounded && m_CoyoteTimeCoroutine ==null)
         {
             m_CoyoteTimeCoroutine = StartCoroutine(CoyoteTime());
@@ -275,7 +319,8 @@ public class CharacterMovement : MonoBehaviour
             m_CoyoteTimeCounter = m_CoyoteTime;
 
         }
-        //jump buffer
+#endregion
+#region Jump Buffer Activate
         if (m_JumpBufferCounter > 0f)
         {
             m_JumpBufferCounter -= Time.deltaTime;
@@ -285,7 +330,7 @@ public class CharacterMovement : MonoBehaviour
         {
            Jump();
         }
-
+#endregion
         if (m_IsGrounded)
         {
           m_RB.gravityScale = 1;
@@ -300,7 +345,7 @@ public class CharacterMovement : MonoBehaviour
 
         }
         
-
+#region Turning 
         if (m_InMove !=0 && !m_IsTurning)
         {
             if (m_LastMoveDirection != 0 && Mathf.Sign(m_InMove) !=m_LastMoveDirection)
@@ -311,12 +356,12 @@ public class CharacterMovement : MonoBehaviour
             }
   
         }
-
-    // animator paraneters
+#endregion
+#region Animator Parameters
     m_Animator.SetFloat("Speed", Mathf.Abs(m_InMove));
     m_Animator.SetFloat("YVelocity", m_RB.linearVelocityY);
     m_Animator.SetBool("IsGrounded", m_IsGrounded);
-
+#endregion
 
     }
 
