@@ -15,12 +15,15 @@ public class CharacterMovement : MonoBehaviour
 [Header("Components")]
 	private Rigidbody2D m_RB;
     public Animator m_Animator;
+    [SerializeField] private Transform m_RaycastPosition;
+
 
     [Header("Movement")]
 	[SerializeField] public float m_MoveSpeed;
     [SerializeField] private float m_LastMoveDirection;
     [SerializeField] private float m_FacingDirection;
     [SerializeField] private bool m_IsTurning;
+    private float m_InMove;
 
     [Header("Jump")]
     [SerializeField] private float m_CoyoteTime = 0.2f;
@@ -30,8 +33,6 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] public bool m_IsRunning;
 	[SerializeField] private float m_JumpStrength;
-	[SerializeField] private Transform m_RaycastPosition;
-	[SerializeField] private LayerMask m_GroundLayer;
     [SerializeField] private bool m_HasJumped;
     [SerializeField] private bool m_JumpedPressed;
     [SerializeField] public float m_JumpCounter;
@@ -45,6 +46,7 @@ public class CharacterMovement : MonoBehaviour
     [Header("Ground Detection")]
     public bool m_wasGrounded;
     public bool m_IsGrounded;
+	[SerializeField] private LayerMask m_GroundLayer;
 
     [Header("Crouch & Slide")]
     public bool m_SlideActivate;
@@ -66,8 +68,7 @@ public class CharacterMovement : MonoBehaviour
 [SerializeField] public float m_CornerCorrectionAmount = 0.075f;
 [SerializeField] private int m_CornerCorrectionSteps =5;
 private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
-	private float m_InMove;
-    private PlayerControls m_ActionMap;
+ private PlayerControls m_ActionMap;
 
  #endregion
  #region Awake
