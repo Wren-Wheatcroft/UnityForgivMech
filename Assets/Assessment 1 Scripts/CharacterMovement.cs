@@ -8,6 +8,7 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using System.Collections;
+using System.Collections.Generic;
 //using System.Numerics;
 
 public class CharacterMovement : MonoBehaviour
@@ -70,6 +71,9 @@ public class CharacterMovement : MonoBehaviour
 [SerializeField] private Collider2D m_PlayerCollider;
 [SerializeField] public float m_CornerCorrectionAmount = 0.075f;
 [SerializeField] private int m_CornerCorrectionSteps =5;
+
+[Header("Gizmos")]
+[SerializeField] public bool m_ShowGizmos = true;
 private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
  private PlayerControls m_ActionMap;
 
@@ -372,9 +376,55 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
     #region Gizmo
     private void OnDrawGizmos()
     {
+       if(!m_ShowGizmos) return;
+
+
+
+       // Ground Detect
         if (m_RaycastPosition == null) return;
-        Gizmos.color = Color.seaGreen;
+        Gizmos.color = m_IsGrounded? Color.seaGreen : Color.red;
         Gizmos.DrawWireCube(m_RaycastPosition.position + Vector3.down *m_GroundCheckDistance, m_GroundCheckSize);
-    }
+
+        //coyote time
+        Gizmos.color = Color.softYellow;
+        Gizmos.DrawWireSphere(m_RaycastPosition.position, 0.5f);
+
+        //jump buf
+        if (m_JumpBufferCounter > 0)
+        {
+            Gizmos.color = Color.paleGreen;
+            Gizmos.DrawWireSphere (transform.position,0.35f);
+        }
+
+        //cornercor
+        if(m_PlayerCollider!=null)
+        {
+            Gizmos.color = Color.darkMagenta;
+            Gizmos.DrawWireSphere(m_PlayerCollider.bounds.center, m_CornerCorrectionAmount *m_CornerCorrectionSteps);
+        }
+
+        //Player Colid
+        if( m_PlayerCollider !=null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube (m_PlayerCollider.bounds.center, m_PlayerCollider.bounds.size);
+
+        }
+        
+        //Dash
+        if (m_IsDashing && m_PlayerCollider != null)
+        {
+            Gizmos.color = Color.aliceBlue;
+            Gizmos.DrawRay ( m_PlayerCollider.bounds.center,Vector3.right *m_DashDirection *1f );
+
+        }
+        //movment 
+        if (m_InMove !=0)
+        {
+            Gizmos.color = Color.floralWhite;
+            Gizmos.DrawRay(transform.position, Vector3.right* m_InMove *0.5f);
+        }
+
+        }
     #endregion
 }
