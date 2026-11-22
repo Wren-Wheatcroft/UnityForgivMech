@@ -13,7 +13,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private Color m_DamageColor = Color.red;
     [SerializeField] private float m_FlashDuration = 0.1f;
     [SerializeField] private int m_FlashNum = 3;
-    [SerializeField] bool m_CanTakeDamage;
+    [SerializeField] bool m_CanTakeDamage = true;
     [SerializeField] float m_InvTime;
     private Color m_OgColor;
     private Coroutine m_FlashCoroutine;
@@ -25,6 +25,7 @@ public class PlayerHealth : MonoBehaviour
         m_SpriteRenderer = transform.Find("Sprite").GetComponentInChildren<SpriteRenderer>();
         m_CurrentHealth = m_MaxHealth;
         m_OgColor = m_SpriteRenderer.color;
+        Debug.Log("Player Health is:" + m_CurrentHealth);
     }
 
     public void TakeDamage(int Damage)
