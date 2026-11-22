@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Rendering.RenderGraphModule;
+using UnityEditor.ProjectWindowCallback;
 public class GhostTrail : MonoBehaviour
 {
 private SpriteRenderer m_SpriteRenderer;
@@ -12,7 +13,7 @@ float alpha;
     {
         m_SpriteRenderer =GetComponent<SpriteRenderer>();
     }
-
+#region GhostSpawn
 public void GhostSpawn(Sprite sprite, bool flipx, Color color)
     {
         m_SpriteRenderer.sprite = sprite;
@@ -22,7 +23,8 @@ public void GhostSpawn(Sprite sprite, bool flipx, Color color)
         StartCoroutine(DashFade());
 
     }
-
+    #endregion
+#region Dashfade
     private IEnumerator DashFade()
     {
         timer = 0f;
@@ -43,3 +45,4 @@ public void GhostSpawn(Sprite sprite, bool flipx, Color color)
         }
     }
 }
+#endregion 
