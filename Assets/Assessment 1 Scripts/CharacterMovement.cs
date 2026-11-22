@@ -8,6 +8,7 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using System.Collections;
+using System.Numerics;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -47,6 +48,8 @@ public class CharacterMovement : MonoBehaviour
     public bool m_wasGrounded;
     public bool m_IsGrounded;
 	[SerializeField] private LayerMask m_GroundLayer;
+   [SerializeField] private Vector2 m_GroundCheckSize = new Vector2(0.5f,0.1f);
+    [SerializeField]private float m_GroudCheckDistance =0.2f;
 
     [Header("Crouch & Slide")]
     public bool m_SlideActivate;
