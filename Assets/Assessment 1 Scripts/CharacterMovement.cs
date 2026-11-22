@@ -8,7 +8,7 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using System.Collections;
-using System.Numerics;
+//using System.Numerics;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -49,7 +49,7 @@ public class CharacterMovement : MonoBehaviour
     public bool m_IsGrounded;
 	[SerializeField] private LayerMask m_GroundLayer;
    [SerializeField] private Vector2 m_GroundCheckSize = new Vector2(0.5f,0.1f);
-    [SerializeField]private float m_GroudCheckDistance =0.2f;
+    [SerializeField]private float m_GroundCheckDistance =0.2f;
 
     [Header("Crouch & Slide")]
     public bool m_SlideActivate;
@@ -298,8 +298,8 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
 
         m_wasGrounded = m_IsGrounded;
 
-        m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
-
+        //m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
+        m_IsGrounded = Physics2D.BoxCast(m_RaycastPosition.position, m_GroundCheckSize, 0f, Vector2.down, m_GroundCheckDistance, m_GroundLayer);
 
   
         if(m_RB.linearVelocityY < 1 && m_RB.linearVelocityY > -1 || !m_JumpedPressed && m_HasJumped)
@@ -369,5 +369,12 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
 
     }
 
-  
+    #region Gizmo
+    private void OnDrawGizmos()
+    {
+        if (m_RaycastPosition == null) return;
+        Gizmos.color = Color.seaGreen;
+        Gizmos.DrawWireCube(m_RaycastPosition.position + Vector3.down *m_GroundCheckDistance, m_GroundCheckSize);
+    }
+    #endregion
 }
