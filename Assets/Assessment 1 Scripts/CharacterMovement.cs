@@ -43,7 +43,7 @@ public class CharacterMovement : MonoBehaviour
     [Header("Particles")]
     [SerializeField] private ParticleSystem  m_LandingParticles;
     [SerializeField] private ParticleSystem  m_LandingParticlesOnLand;
-    [SerializeField] private ParticleSystem  m_DashParticles;
+    //[SerializeField] private ParticleSystem  m_DashParticles;
     
     [Header("Ground Detection")]
     public bool m_wasGrounded;
@@ -66,6 +66,13 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] public float m_DashDuration;
     [SerializeField] public float m_DashCooldown;
     private Coroutine m_DashCoroutine;
+
+    [Header("Dash Ghost")]
+    [SerializeField] private GameObject m_DashGhost;
+    [SerializeField] private float m_GhostSpawnRate = 0.05f;
+    [SerializeField] private Color m_GhostColor = new Color(1f, 1f, 1f, 0.5f);
+    private Coroutine m_GhostCoroutine;
+
 
 [Header("Corner Correction")]
 [SerializeField] private Collider2D m_PlayerCollider;
@@ -161,6 +168,8 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
             }
         }
     }
+
+
     #endregion
         #region InputFunctions
 
@@ -229,7 +238,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
         if (m_CanDash && !m_IsDashing)
         {
             m_DashCoroutine = StartCoroutine(Dash());
-            m_DashParticles.Play();
+            //m_DashParticles.Play();
 
         }
 
@@ -249,6 +258,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
     {
         m_IsDashing = true;
         m_CanDash = false;
+        m_GhostCoroutine = StartCoroutine(Ghost());
         m_OgGravity = m_RB.gravityScale;
         m_RB.gravityScale = 0;
 
@@ -283,6 +293,21 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
         m_CoyoteTimeCoroutine = null;
         m_JumpCounter = 0f;
     }
+    #endregion
+    #region Ghost
+    private IEnumerator Ghost()
+    {
+     while (m_IsDashing)
+        {
+            GameObject Ghost = Instantiate(m_DashGhost, transform.position, transform.rotation);
+            GhostTrail GhostTrailScript = Ghost.GetComponent<GhostTrail>();
+            GhostTrailScript.GhostSpawn(m_SpriteRenderer.sprite, m_SpriteRenderer.flipX, m_GhostColor);
+            yield return new WaitForSeconds (m_GhostSpawnRate);
+
+        }   
+        m_GhostCoroutine = null;
+    }
+
     #endregion
 #region land Particles
     private void OnCollisionEnter2D(Collision2D other)
