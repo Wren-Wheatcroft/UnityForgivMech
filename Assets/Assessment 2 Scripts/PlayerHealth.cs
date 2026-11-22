@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
+
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -15,6 +18,11 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private int m_FlashNum = 3;
     [SerializeField] bool m_CanTakeDamage = true;
     [SerializeField] float m_InvTime;
+    [Header("Death")]
+    [SerializeField] public bool m_IsDead;
+    [SerializeField] public float m_DeathDelay = 2f;
+    [SerializeField] private CharacterMovement m_CharacterMovement;
+    private Coroutine DeathCoroutine;
     private Color m_OgColor;
     private Coroutine m_FlashCoroutine;
     private Coroutine m_InvCoroutine;
@@ -26,6 +34,7 @@ public class PlayerHealth : MonoBehaviour
         m_CurrentHealth = m_MaxHealth;
         m_OgColor = m_SpriteRenderer.color;
         Debug.Log("Player Health is:" + m_CurrentHealth);
+        m_CharacterMovement = GetComponent<CharacterMovement>();
     }
 
     public void TakeDamage(int Damage)
@@ -37,6 +46,7 @@ public class PlayerHealth : MonoBehaviour
 
         m_CurrentHealth -= Damage; 
         m_CurrentHealth = Mathf.Max(m_CurrentHealth, 0);
+        Debug.Log("TakeDamage Was Called");
         Debug.Log("Player Health: " + m_CurrentHealth);
 
         if (m_FlashCoroutine !=null)
@@ -58,7 +68,21 @@ public class PlayerHealth : MonoBehaviour
 private void Die()
     {
         Debug.Log("Player Died");
+        m_IsDead = true;
+        m_CharacterMovement.m_Animator.SetBool("IsDead", true);
+        m_CharacterMovement.enabled = false;
+        
+        Rigidbody2D m_RB = GetComponent<Rigidbody2D>();
+        m_RB.linearVelocity = Vector2.zero;
+        m_RB.bodyType = RigidbodyType2D.Kinematic;
+        StartCoroutine (Death());
 
+    }
+
+    private IEnumerator Death()
+    {
+        yield return new WaitForSeconds(m_DeathDelay);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     #endregion
 
