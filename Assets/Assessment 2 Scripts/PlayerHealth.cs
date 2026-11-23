@@ -19,7 +19,11 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] bool m_CanTakeDamage = true;
     [SerializeField] float m_InvTime;
     [SerializeField] private AudioClip[] m_DamageSoundClips;
-    [SerializeField] private ParticleSystem  m_BloodParticles;
+
+    [Header("Particles")]
+    [SerializeField] private ParticleSystem  m_BloodParticles;    
+    [SerializeField] private ParticleSystem  m_BloodBurstParticles;
+
 
     [Header("Death")]
     [SerializeField] public bool m_IsDead;
@@ -103,6 +107,8 @@ private IEnumerator DamageFlash()
             m_SpriteRenderer.color = m_OgColor;
             yield return new WaitForSeconds (m_FlashDuration);
             m_BloodParticles.Play();
+            m_BloodBurstParticles.Play();
+
 
         }
         m_SpriteRenderer.color = m_OgColor;
