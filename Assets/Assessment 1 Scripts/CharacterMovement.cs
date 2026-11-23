@@ -54,28 +54,28 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private AudioClip m_GroundedAudioClip;
 
 
-    [Header("Crouch & Slide")]
-    public bool m_SlideActivate;
-    public Vector2 m_CrouchSize;
-    public Vector2 m_RegSize;
+[Header("Crouch & Slide")]
+public bool m_SlideActivate;
+public Vector2 m_CrouchSize;
+public Vector2 m_RegSize;
 
 
 [Header("Dash")]
-    [SerializeField] private bool m_IsDashing;
-    [SerializeField] private bool m_CanDash = true;
-    [SerializeField] private float m_OgGravity;       
-    [SerializeField] private float m_DashDirection; 
-    [SerializeField] private float m_DashSpeed;
-    [SerializeField] public float m_DashDuration;
-    [SerializeField] public float m_DashCooldown;
-    private Coroutine m_DashCoroutine;
-    [SerializeField] private AudioClip[] m_DashAudioClips;
+[SerializeField] private bool m_IsDashing;
+[SerializeField] private bool m_CanDash = true;
+[SerializeField] private float m_OgGravity;       
+[SerializeField] private float m_DashDirection; 
+[SerializeField] private float m_DashSpeed;
+[SerializeField] public float m_DashDuration;
+[SerializeField] public float m_DashCooldown;
+private Coroutine m_DashCoroutine;
+[SerializeField] private AudioClip[] m_DashAudioClips;
 
-    [Header("Dash Ghost")]
-    [SerializeField] private GameObject m_DashGhost;
-    [SerializeField] private float m_GhostSpawnRate = 0.05f;
-    [SerializeField] private Color m_GhostColor = new Color(1f, 1f, 1f, 0.5f);
-    private Coroutine m_GhostCoroutine;
+[Header("Dash Ghost")]
+[SerializeField] private GameObject m_DashGhost;
+[SerializeField] private float m_GhostSpawnRate = 0.05f;
+[SerializeField] private Color m_GhostColor = new Color(1f, 1f, 1f, 0.5f);
+private Coroutine m_GhostCoroutine;
 
 
 [Header("Corner Correction")]
@@ -87,6 +87,17 @@ public class CharacterMovement : MonoBehaviour
 [SerializeField] public bool m_ShowGizmos = true;
 private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
  private PlayerControls m_ActionMap;
+
+ [Header("WallJump")]
+ [SerializeField] private float m_WallJumpForce =10f;
+ [SerializeField] private float m_WallJumpHorizForce = 10f;
+ [SerializeField]private float m_WallCheckDistance = 0.5f;
+ [SerializeField] private LayerMask m_WallLayer;
+ private bool m_IsTouchingWalls;
+ private int m_WallDirection;
+ private bool m_IsWallJumping;
+
+ private Coroutine m_WallJumpCoroutine;
 
  #endregion
  #region Awake
@@ -174,6 +185,37 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
             }
         }
     }
+    #region Wall Jump
+    private void CheckWall()
+    {
+        RaycastHit2D m_WallHit = Physics2D.Raycast(m_PlayerCollider.bounds.center, Vector2.right* (m_SpriteRenderer.flipX ? -1 : 1 ), m_WallCheckDistance, m_WallLayer);
+        m_IsTouchingWalls = m_WallHit.collider !=null;
+
+        if (m_IsTouchingWalls)
+        {
+            m_WallDirection = m_SpriteRenderer.flipX ? -1:1;
+        }
+    }
+    private void WallJump()
+    {
+        m_RB.linearVelocity = Vector2.zero;
+
+        m_RB.linearVelocity = new Vector2(-m_WallDirection * m_WallJumpHorizForce, m_WallJumpForce);
+        m_HasJumped = true;
+        m_IsWallJumping = true;
+         m_CoyoteTimeCounter = 0f;
+         m_JumpBufferCounter = 0f;
+
+        SoundManager.instance.PlayRandomSound(m_JumpAudioClips, transform, 1f);
+        m_WallJumpCoroutine = StartCoroutine(WallJumpWait());
+
+    }
+    private IEnumerator WallJumpWait()
+    {
+        yield return new WaitForSeconds(0.25f);
+        m_IsWallJumping = false;
+    }
+    #endregion
 
 
     #endregion
@@ -204,18 +246,23 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
 
         m_JumpedPressed = true;
         m_HasJumped = true;
-        m_JumpCounter = 1;
        
 
       
         m_JumpBufferCounter = m_JumpBufferTime;
-        
-        if (m_IsGrounded || m_CoyoteTimeCounter > 0f && m_JumpCounter <= 0f) 
+        CheckWall();
+
+        if(m_IsTouchingWalls && !m_IsGrounded)
+        {
+            WallJump();
+        }
+        else if (m_IsGrounded || m_CoyoteTimeCounter > 0f && m_JumpCounter <= 0f) 
         {
             Jump();
         }
         
             Debug.Log("Jump Buffer Counting:" + m_JumpBufferCounter); 
+                m_JumpCounter = 1;
 
     }
 
@@ -337,6 +384,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
 
 
         m_wasGrounded = m_IsGrounded;
+        CheckWall();
 
         //m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
         m_IsGrounded = Physics2D.BoxCast(m_RaycastPosition.position, m_GroundCheckSize, 0f, Vector2.down, m_GroundCheckDistance, m_GroundLayer);
