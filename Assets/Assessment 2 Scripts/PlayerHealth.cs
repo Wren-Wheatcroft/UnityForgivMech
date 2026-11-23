@@ -19,7 +19,6 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] bool m_CanTakeDamage = true;
     [SerializeField] float m_InvTime;
     [SerializeField] private AudioClip[] m_DamageSoundClips;
-    private Animator animator;
     [SerializeField] public bool m_IsHurt;
 
 
@@ -39,7 +38,6 @@ public class PlayerHealth : MonoBehaviour
     private Coroutine m_FlashCoroutine;
     private Coroutine m_InvCoroutine;
 
-    public Animator Animator { get => animator; set => animator = value; }
     #endregion
 
     private void Awake()
@@ -139,7 +137,7 @@ private IEnumerator DamageFlash()
 
     private void Update()
     {
-           Animator.SetBool("IsHurt", m_IsHurt);
+           m_CharacterMovement.m_Animator.SetBool("IsHurt", m_IsHurt);
 
     }
 }

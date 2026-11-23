@@ -12,6 +12,8 @@ public class SoundManager : MonoBehaviour
         m_SoundPrefab = new GameObject();
         m_SoundPrefab.AddComponent<AudioSource>();
 
+       // m_SoundPrefab.GetComponent<AudioSource>().outputAudioMixerGroup = 
+
         if (instance == null)
         {
             instance = this;

@@ -457,6 +457,8 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
     m_Animator.SetFloat("YVelocity", m_RB.linearVelocityY);
     m_Animator.SetBool("IsGrounded", m_IsGrounded);
     m_Animator.SetBool("IsWallJumping", m_IsWallJumping);
+    m_Animator.SetBool("IsDashing", m_IsDashing);
+
 
 #endregion
 
