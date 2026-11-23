@@ -19,6 +19,10 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] bool m_CanTakeDamage = true;
     [SerializeField] float m_InvTime;
     [SerializeField] private AudioClip[] m_DamageSoundClips;
+    private Animator animator;
+    [SerializeField] public bool m_IsHurt;
+
+
 
     [Header("Particles")]
     [SerializeField] private ParticleSystem  m_BloodParticles;    
@@ -34,7 +38,9 @@ public class PlayerHealth : MonoBehaviour
     private Color m_OgColor;
     private Coroutine m_FlashCoroutine;
     private Coroutine m_InvCoroutine;
-#endregion
+
+    public Animator Animator { get => animator; set => animator = value; }
+    #endregion
 
     private void Awake()
     {
@@ -57,6 +63,10 @@ public class PlayerHealth : MonoBehaviour
         SoundManager.instance.PlayRandomSound(m_DamageSoundClips, transform, 1f);
         Debug.Log("TakeDamage Was Called");
         Debug.Log("Player Health: " + m_CurrentHealth);
+        m_IsHurt = true;
+
+        
+
 
         if (m_FlashCoroutine !=null)
         {
@@ -70,6 +80,8 @@ public class PlayerHealth : MonoBehaviour
         {
             Die();
         }
+        m_IsHurt = false;
+
 
     }
     #endregion
@@ -124,4 +136,10 @@ private IEnumerator DamageFlash()
         m_InvCoroutine= null;
     }
     #endregion
+
+    private void Update()
+    {
+           Animator.SetBool("IsHurt", m_IsHurt);
+
+    }
 }

@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class DmgSpike : MonoBehaviour
 {
+    private static readonly int IsHurtHash = Animator.StringToHash("IsHurt");
     #region Variables!
     [Header("Damage")]
     [SerializeField] private int m_DamageAmount = 1;
@@ -47,4 +49,5 @@ public class DmgSpike : MonoBehaviour
         }
     }
     #endregion
+ 
 }
