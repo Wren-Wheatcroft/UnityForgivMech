@@ -208,6 +208,8 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
 
         SoundManager.instance.PlayRandomSound(m_JumpAudioClips, transform, 1f);
         m_WallJumpCoroutine = StartCoroutine(WallJumpWait());
+         m_IsGrounded = false ;
+         m_HasJumped = true;
 
     }
     private IEnumerator WallJumpWait()
@@ -422,6 +424,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
         {
            Jump();
         }
+        else if (m_JumpBufferCounter > 0f && m_IsWallJumping && ( m_IsGrounded || m_CoyoteTimeCounter > 0f))
 #endregion
         if (m_IsGrounded)
         {
