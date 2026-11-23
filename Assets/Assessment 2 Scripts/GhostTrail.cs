@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Rendering.RenderGraphModule;
-using UnityEditor.ProjectWindowCallback;
+
 public class GhostTrail : MonoBehaviour
 {
 private SpriteRenderer m_SpriteRenderer;

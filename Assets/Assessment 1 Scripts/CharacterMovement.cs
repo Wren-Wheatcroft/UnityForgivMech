@@ -38,12 +38,12 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private bool m_HasJumped;
     [SerializeField] private bool m_JumpedPressed;
     [SerializeField] public float m_JumpCounter;
+    [SerializeField] private AudioClip[] m_JumpAudioClips;
     private Coroutine m_CoyoteTimeCoroutine;
 
     [Header("Particles")]
     [SerializeField] private ParticleSystem  m_LandingParticles;
     [SerializeField] private ParticleSystem  m_LandingParticlesOnLand;
-    //[SerializeField] private ParticleSystem  m_DashParticles;
     
     [Header("Ground Detection")]
     public bool m_wasGrounded;
@@ -51,11 +51,14 @@ public class CharacterMovement : MonoBehaviour
 	[SerializeField] private LayerMask m_GroundLayer;
    [SerializeField] private Vector2 m_GroundCheckSize = new Vector2(0.5f,0.1f);
     [SerializeField]private float m_GroundCheckDistance =0.2f;
+    [SerializeField] private AudioClip m_GroundedAudioClip;
+
 
     [Header("Crouch & Slide")]
     public bool m_SlideActivate;
     public Vector2 m_CrouchSize;
     public Vector2 m_RegSize;
+
 
 [Header("Dash")]
     [SerializeField] private bool m_IsDashing;
@@ -66,6 +69,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] public float m_DashDuration;
     [SerializeField] public float m_DashCooldown;
     private Coroutine m_DashCoroutine;
+    [SerializeField] private AudioClip[] m_DashAudioClips;
 
     [Header("Dash Ghost")]
     [SerializeField] private GameObject m_DashGhost;
@@ -138,6 +142,8 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
          m_RB.AddForce(Vector2.up * m_JumpStrength, ForceMode2D.Impulse);
          m_CoyoteTimeCounter = 0f;
          m_JumpBufferCounter = 0f;
+         SoundManager.instance.PlayRandomSound(m_JumpAudioClips, transform, 1f);
+
          
          if (m_CoyoteTimeCoroutine != null)
          {
@@ -261,6 +267,8 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
         m_GhostCoroutine = StartCoroutine(Ghost());
         m_OgGravity = m_RB.gravityScale;
         m_RB.gravityScale = 0;
+        SoundManager.instance.PlayRandomSound(m_DashAudioClips, transform, 1f);
+
 
         if (m_SpriteRenderer.flipX == true)
         {
@@ -312,9 +320,12 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
 #region land Particles
     private void OnCollisionEnter2D(Collision2D other)
     {
+
         if (Mathf.RoundToInt(other.GetContact(0).normal.y) == 1)
         {
             m_LandingParticlesOnLand.Play();
+            SoundManager.instance.PlaySound(m_GroundedAudioClip, transform, 1f);
+
 
         }
     }

@@ -18,10 +18,12 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private int m_FlashNum = 3;
     [SerializeField] bool m_CanTakeDamage = true;
     [SerializeField] float m_InvTime;
+    [SerializeField] private AudioClip[] m_DamageSoundClips;
     [Header("Death")]
     [SerializeField] public bool m_IsDead;
     [SerializeField] public float m_DeathDelay = 2f;
-    [SerializeField] private CharacterMovement m_CharacterMovement;
+    private CharacterMovement m_CharacterMovement;
+    [SerializeField] private AudioClip m_DeathSoundClip;
     private Coroutine DeathCoroutine;
     private Color m_OgColor;
     private Coroutine m_FlashCoroutine;
@@ -36,7 +38,7 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player Health is:" + m_CurrentHealth);
         m_CharacterMovement = GetComponent<CharacterMovement>();
     }
-
+#region TakeDamage
     public void TakeDamage(int Damage)
     {
         if (!m_CanTakeDamage || m_CurrentHealth <= 0)
@@ -46,6 +48,7 @@ public class PlayerHealth : MonoBehaviour
 
         m_CurrentHealth -= Damage; 
         m_CurrentHealth = Mathf.Max(m_CurrentHealth, 0);
+        SoundManager.instance.PlayRandomSound(m_DamageSoundClips, transform, 1f);
         Debug.Log("TakeDamage Was Called");
         Debug.Log("Player Health: " + m_CurrentHealth);
 
@@ -63,6 +66,7 @@ public class PlayerHealth : MonoBehaviour
         }
 
     }
+    #endregion
 
 #region Death
 private void Die()
@@ -70,6 +74,7 @@ private void Die()
         Debug.Log("Player Died");
         m_IsDead = true;
         m_CharacterMovement.m_Animator.SetBool("IsDead", true);
+        SoundManager.instance.PlaySound(m_DeathSoundClip, transform, 1f);
         m_CharacterMovement.enabled = false;
         
         Rigidbody2D m_RB = GetComponent<Rigidbody2D>();

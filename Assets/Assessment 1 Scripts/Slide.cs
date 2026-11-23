@@ -7,10 +7,14 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using System.Collections;
 
 
 public class Slide : MonoBehaviour
 {
+    [SerializeField] private AudioClip m_SlideAudioClip;
+    [SerializeField] private float m_SlideDuration = 0.5f;
+    private Coroutine m_SlideCoroutine;
 
     public CharacterMovement m_PlayerMoveVars;
     PlayerControls m_ActionMap2;
@@ -54,16 +58,22 @@ public class Slide : MonoBehaviour
             m_PlayerMoveVars.m_SlideActivate = true;
             m_PlayerMoveVars.m_MoveSpeed = 15f;
             capsule.size = m_PlayerMoveVars.m_CrouchSize;
+            SoundManager.instance.PlaySound(m_SlideAudioClip, transform, 0.5f);
+            m_SlideCoroutine = StartCoroutine(m_SlideDurationAnimation());
+
         }
 
     }
     private void Handle_SlideCancel(InputAction.CallbackContext context)
     {
-     m_PlayerMoveVars.m_SlideActivate = false;
-     capsule.size = m_PlayerMoveVars.m_RegSize;
     }
-
-    // Update is called once per frame
+    private IEnumerator m_SlideDurationAnimation()
+    {
+        yield return new WaitForSeconds(m_SlideDuration);
+        m_PlayerMoveVars.m_SlideActivate = false;
+        capsule.size = m_PlayerMoveVars.m_RegSize;    
+        m_SlideCoroutine = null;    
+    }
     void Update()
     {
         m_Animator.SetBool("SlideActivate", m_PlayerMoveVars.m_SlideActivate);
