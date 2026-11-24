@@ -9,6 +9,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.Mathematics;
 //using System.Numerics;
 
 public class CharacterMovement : MonoBehaviour
@@ -93,6 +95,9 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
  [SerializeField] private float m_WallJumpHorizForce = 10f;
  [SerializeField]private float m_WallCheckDistance = 0.5f;
  [SerializeField] private LayerMask m_WallLayer;
+ [SerializeField] bool m_IsWallSliding;
+ [SerializeField] float m_WallSlidingSpeed = 2f;
+ private Transform WallCheck;
  private bool m_IsTouchingWalls;
  private int m_WallDirection;
  private bool m_IsWallJumping;
@@ -186,16 +191,34 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
         }
     }
     #region Wall Jump
-    private void CheckWall()
-    {
-        RaycastHit2D m_WallHit = Physics2D.Raycast(m_PlayerCollider.bounds.center, Vector2.right* (m_SpriteRenderer.flipX ? -1 : 1 ), m_WallCheckDistance, m_WallLayer);
-        m_IsTouchingWalls = m_WallHit.collider !=null;
 
-        if (m_IsTouchingWalls)
-        {
-            m_WallDirection = m_SpriteRenderer.flipX ? -1:1;
-        }
-    }
+    // private bool CheckWall()
+    // {
+    //     return Physics2D.OverlapCircle(WallCheck.position, 0.2f, m_WallLayer);
+
+    // }
+    // // private void WallSlide()
+    // {
+    //     if (CheckWall() && !m_IsGrounded && m_MoveSpeed != 0f )
+    //     {
+    //         m_IsWallSliding = true;
+    //         m_RB.linearVelocity = new Vector2 (m_RB.linearVelocityX, Mathf.Clamp(m_RB.linearVelocityY -m_WallSlidingSpeed, float.MaxValue));
+    //     }
+    //     else
+    //     {
+    //         m_IsWallSliding = false;
+    //     }
+    // }
+    // private void CheckWall()
+    // {
+    //     RaycastHit2D m_WallHit = Physics2D.Raycast(m_PlayerCollider.bounds.center, Vector2.right* (m_SpriteRenderer.flipX ? -1 : 1 ), m_WallCheckDistance, m_WallLayer);
+    //     m_IsTouchingWalls = m_WallHit.collider !=null;
+
+    //     if (m_IsTouchingWalls)
+    //     {
+    //         m_WallDirection = m_SpriteRenderer.flipX ? -1:1;
+    //     }
+    // }
     private void WallJump()
     {
         m_RB.linearVelocity = Vector2.zero;
@@ -252,7 +275,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
 
       
         m_JumpBufferCounter = m_JumpBufferTime;
-        CheckWall();
+        //CheckWall();
 
         if(m_IsTouchingWalls && !m_IsGrounded)
         {
@@ -386,7 +409,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
 
 
         m_wasGrounded = m_IsGrounded;
-        CheckWall();
+        //CheckWall();
 
         //m_IsGrounded = Physics2D.Raycast(m_RaycastPosition.position, Vector2.down, 0.1f, m_GroundLayer);
         m_IsGrounded = Physics2D.BoxCast(m_RaycastPosition.position, m_GroundCheckSize, 0f, Vector2.down, m_GroundCheckDistance, m_GroundLayer);
@@ -452,6 +475,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
   
         }
 #endregion
+//WallSlide();
 #region Animator Parameters
     m_Animator.SetFloat("Speed", Mathf.Abs(m_InMove));
     m_Animator.SetFloat("YVelocity", m_RB.linearVelocityY);

@@ -32,7 +32,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] public bool m_IsDead;
     [SerializeField] public float m_DeathDelay = 2f;
     private CharacterMovement m_CharacterMovement;
-    [SerializeField] private AudioClip m_DeathSoundClip;
+    [SerializeField] private AudioClip[] m_DeathSoundClips;
     private Coroutine DeathCoroutine;
     private Color m_OgColor;
     private Coroutine m_FlashCoroutine;
@@ -90,7 +90,7 @@ private void Die()
         Debug.Log("Player Died");
         m_IsDead = true;
         m_CharacterMovement.m_Animator.SetBool("IsDead", true);
-        SoundManager.instance.PlaySound(m_DeathSoundClip, transform, 1f);
+        SoundManager.instance.PlayRandomSound(m_DeathSoundClips, transform, 1f);
         m_CharacterMovement.enabled = false;
         
         Rigidbody2D m_RB = GetComponent<Rigidbody2D>();
