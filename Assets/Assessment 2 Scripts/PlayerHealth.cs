@@ -20,6 +20,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] float m_InvTime;
     [SerializeField] private AudioClip[] m_DamageSoundClips;
     [SerializeField] public bool m_IsHurt;
+    [SerializeField] private float m_HurtDuration = 0.3f;
+    private Coroutine m_HurtCoroutine;
 
 
 
@@ -37,7 +39,14 @@ public class PlayerHealth : MonoBehaviour
     private Color m_OgColor;
     private Coroutine m_FlashCoroutine;
     private Coroutine m_InvCoroutine;
+    
+    [Header("Knockback")]
+    [SerializeField] private float m_KnockbackForce =5f;
+    [SerializeField] private float m_KnockbackUpForce = 2f;
+    private float m_KnockDirection;
 
+    private Rigidbody2D m_RB;
+    private CameraShake m_CameraShake;
     #endregion
 
     private void Awake()
@@ -47,6 +56,8 @@ public class PlayerHealth : MonoBehaviour
         m_OgColor = m_SpriteRenderer.color;
         Debug.Log("Player Health is:" + m_CurrentHealth);
         m_CharacterMovement = GetComponent<CharacterMovement>();
+        m_RB = GetComponent<Rigidbody2D>();
+        m_CameraShake = Camera.main.GetComponent<CameraShake>();
     }
 #region TakeDamage
     public void TakeDamage(int Damage)
@@ -61,7 +72,16 @@ public class PlayerHealth : MonoBehaviour
         SoundManager.instance.PlayRandomSound(m_DamageSoundClips, transform, 1f);
         Debug.Log("TakeDamage Was Called");
         Debug.Log("Player Health: " + m_CurrentHealth);
-        m_IsHurt = true;
+        if (m_HurtCoroutine != null)
+        {
+            StopCoroutine(m_HurtCoroutine);
+        }
+        m_HurtCoroutine = StartCoroutine(HurtAnimation());
+        Knockback();
+        if (m_CameraShake!= null)
+        {
+            m_CameraShake.ShakeCamera();
+        }
 
         
 
@@ -78,12 +98,21 @@ public class PlayerHealth : MonoBehaviour
         {
             Die();
         }
-        m_IsHurt = false;
 
 
     }
     #endregion
+#region Knockback
+private void Knockback()
+{
+    
+    m_KnockDirection = m_SpriteRenderer.flipX ? -1f : 1f;
+    Vector2 m_KnockbackDirection = new Vector2 (m_KnockDirection * m_KnockbackForce, m_KnockbackUpForce);
+    m_CharacterMovement.Knockback(m_KnockbackDirection);
 
+}
+
+#endregion
 #region Death
 private void Die()
     {
@@ -134,10 +163,19 @@ private IEnumerator DamageFlash()
         m_InvCoroutine= null;
     }
     #endregion
+    #region HurtAnimation 
+    private IEnumerator HurtAnimation()
+    {
+        m_IsHurt = true;
+        yield return new WaitForSeconds(m_HurtDuration);
+        m_IsHurt = false;
+        m_HurtCoroutine = null;
+    }
 
     private void Update()
     {
            m_CharacterMovement.m_Animator.SetBool("IsHurt", m_IsHurt);
 
     }
+    #endregion
 }

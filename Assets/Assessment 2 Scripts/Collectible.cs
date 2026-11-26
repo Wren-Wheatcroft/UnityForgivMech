@@ -9,28 +9,28 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using System.Collections;
 
+
 public class Collectible : MonoBehaviour
 {
-    public int m_Score;
     public int m_Value = 1;
     [SerializeField] private AudioClip m_CoinNoise;
-
-
-    void Update()
+    [SerializeField] private float m_TimeBetweenDestroy = 0.3f;
+    [SerializeField] private ParticleSystem  m_CoinBurstParticle;
+ 
+    void Awake()
     {
-        
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         SoundManager.instance.PlaySound(m_CoinNoise, transform, 1f);
         if (collision.CompareTag("Player"))
         {
-            m_Score += m_Value;
-           // SoundManager.instance.PlaySound(m_CoinNoise, transform, 1f);
+            GameManager.instance.m_Score += m_Value;
 
-            Debug.Log("+" + m_Value + "Collected - " + "Score Now - " + m_Score);
-            Destroy(gameObject);
-            
+            Debug.Log("+" + m_Value + "Collected - " + "Score Now - " + GameManager.instance.m_Score);
+        
+            Destroy(gameObject);            
         }
     }
+
 }

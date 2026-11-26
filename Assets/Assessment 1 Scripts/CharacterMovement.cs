@@ -36,7 +36,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float m_JumpBufferCounter = 0.5f;
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] public bool m_IsRunning;
-	[SerializeField] private float m_JumpStrength;
+	[SerializeField] public float m_JumpStrength;
     [SerializeField] private bool m_HasJumped;
     [SerializeField] private bool m_JumpedPressed;
     [SerializeField] public float m_JumpCounter;
@@ -101,8 +101,13 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
  private bool m_IsTouchingWalls;
  private int m_WallDirection;
  private bool m_IsWallJumping;
+private Coroutine m_WallJumpCoroutine;
 
- private Coroutine m_WallJumpCoroutine;
+ 
+ [Header("Knockback")]
+ private bool m_IsKnockedBack;
+ private Coroutine m_KnockbackCoroutine;
+
 
  #endregion
  #region Awake
@@ -364,6 +369,26 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
 
     }
     #endregion
+    #region Dmg Knockback
+    public void Knockback(Vector2 force)
+    {
+      if (m_KnockbackCoroutine !=null)
+      {
+        StopCoroutine(m_KnockbackCoroutine);
+      }
+       m_IsKnockedBack = true;
+       m_RB.linearVelocity = Vector2.zero;
+       m_RB.AddForce(force, ForceMode2D.Impulse);
+       m_KnockbackCoroutine = StartCoroutine(KnockbackWait());
+
+    }
+    private IEnumerator KnockbackWait()
+    {
+        yield return new WaitForSeconds(0.35f);
+        m_IsKnockedBack = false;
+        m_KnockbackCoroutine = null;
+    }
+    #endregion
     #region Coyote Time
     private IEnumerator CoyoteTime()
     {
@@ -457,7 +482,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
         {
             m_CoyoteTimeCounter -= Time.deltaTime;
         }
-		if (!m_IsDashing)
+		if (!m_IsDashing && !m_IsKnockedBack)
         {
              m_RB.linearVelocityX = m_MoveSpeed * m_InMove;
 
@@ -482,8 +507,6 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
     m_Animator.SetBool("IsGrounded", m_IsGrounded);
     m_Animator.SetBool("IsWallJumping", m_IsWallJumping);
     m_Animator.SetBool("IsDashing", m_IsDashing);
-
-
 #endregion
 
     }
