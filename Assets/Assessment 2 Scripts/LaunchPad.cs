@@ -11,7 +11,7 @@ using UnityEngine;
 
  private void OnCollisionEnter2D(Collision2D collision)
   {
-       if (collision.gameObject.TryGetComponent(out Rigidbody2D rb2d));
+       if (collision.gameObject.TryGetComponent(out Rigidbody2D rb2d))
         {
          m_JumpPadParticles.Play();
          SoundManager.instance.PlayRandomSound(m_BoingAudioClips, transform, 1f);
