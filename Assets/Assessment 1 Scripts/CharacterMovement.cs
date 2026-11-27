@@ -51,9 +51,10 @@ public class CharacterMovement : MonoBehaviour
     public bool m_wasGrounded;
     public bool m_IsGrounded;
 	[SerializeField] private LayerMask m_GroundLayer;
-   [SerializeField] private Vector2 m_GroundCheckSize = new Vector2(0.5f,0.1f);
+   [SerializeField] private Vector2 m_GroundCheckSize = new Vector2(0.2f,0.05f);
     [SerializeField]private float m_GroundCheckDistance =0.2f;
     [SerializeField] private AudioClip m_GroundedAudioClip;
+    private bool m_IsTouchingWalls;
 
 
 [Header("Crouch & Slide")]
@@ -90,18 +91,7 @@ private Coroutine m_GhostCoroutine;
 private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
  private PlayerControls m_ActionMap;
 
-//  [Header("WallJump")]
-//  [SerializeField] private float m_WallJumpForce =10f;
-//  [SerializeField] private float m_WallJumpHorizForce = 10f;
-//  [SerializeField]private float m_WallCheckDistance = 0.5f;
-//  [SerializeField] private LayerMask m_WallLayer;
-//  [SerializeField] bool m_IsWallSliding;
-//  [SerializeField] float m_WallSlidingSpeed = 2f;
-//  private Transform WallCheck;
-//  private bool m_IsTouchingWalls;
-//  private int m_WallDirection;
-//  private bool m_IsWallJumping;
-// private Coroutine m_WallJumpCoroutine;
+
 
  
  [Header("Knockback")]
@@ -195,58 +185,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
             }
         }
     }
-    //#region Wall Jump
-
-    // private bool CheckWall()
-    // {
-    //     return Physics2D.OverlapCircle(WallCheck.position, 0.2f, m_WallLayer);
-
-    // }
-    // // private void WallSlide()
-    // {
-    //     if (CheckWall() && !m_IsGrounded && m_MoveSpeed != 0f )
-    //     {
-    //         m_IsWallSliding = true;
-    //         m_RB.linearVelocity = new Vector2 (m_RB.linearVelocityX, Mathf.Clamp(m_RB.linearVelocityY -m_WallSlidingSpeed, float.MaxValue));
-    //     }
-    //     else
-    //     {
-    //         m_IsWallSliding = false;
-    //     }
-    // }
-    // private void CheckWall()
-    // {
-    //     RaycastHit2D m_WallHit = Physics2D.Raycast(m_PlayerCollider.bounds.center, Vector2.right* (m_SpriteRenderer.flipX ? -1 : 1 ), m_WallCheckDistance, m_WallLayer);
-    //     m_IsTouchingWalls = m_WallHit.collider !=null;
-
-    //     if (m_IsTouchingWalls)
-    //     {
-    //         m_WallDirection = m_SpriteRenderer.flipX ? -1:1;
-    //     }
-    // }
-    // private void WallJump()
-    // {
-    //     m_RB.linearVelocity = Vector2.zero;
-
-    //     m_RB.linearVelocity = new Vector2(-m_WallDirection * m_WallJumpHorizForce, m_WallJumpForce);
-    //     m_HasJumped = true;
-    //     m_IsWallJumping = true;
-    //      m_CoyoteTimeCounter = 0f;
-    //      m_JumpBufferCounter = 0f;
-
-    //     SoundManager.instance.PlayRandomSound(m_JumpAudioClips, transform, 1f);
-    //     m_WallJumpCoroutine = StartCoroutine(WallJumpWait());
-    //      m_IsGrounded = false ;
-    //      m_HasJumped = true;
-
-    // }
-    // private IEnumerator WallJumpWait()
-    // {
-    //     yield return new WaitForSeconds(0.25f);
-    //     m_IsWallJumping = false;
-    // }
-    // #endregion
-
+    
 
     #endregion
         #region InputFunctions
@@ -286,7 +225,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
         // {
         //     //WallJump();
         // }
-        if (m_IsGrounded || m_CoyoteTimeCounter > 0f && m_JumpCounter <= 0f) 
+        if (!m_IsTouchingWalls && m_IsGrounded || m_CoyoteTimeCounter > 0f && m_JumpCounter <= 0f) 
         {
             Jump();
         }
@@ -468,7 +407,7 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
             m_JumpBufferCounter -= Time.deltaTime;
         }
     
-        if (m_JumpBufferCounter > 0f && ( m_IsGrounded || m_CoyoteTimeCounter > 0f))
+        if (!m_IsTouchingWalls && m_JumpBufferCounter > 0f && ( m_IsGrounded || m_CoyoteTimeCounter > 0f))
         {
            Jump();
         }
@@ -564,5 +503,21 @@ private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
         }
 
         }
+    #endregion
+    #region Wall Detection
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Walls"))
+        {
+            m_IsTouchingWalls = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Walls"))
+        {
+            m_IsTouchingWalls = false;
+        }
+    }
     #endregion
 }

@@ -176,6 +176,15 @@ private IEnumerator DamageFlash()
         m_IsHurt = false;
         m_HurtCoroutine = null;
     }
+    #region Heal
+    public void Heal(int amount)
+{
+    m_CurrentHealth += amount;
+    m_CurrentHealth = Mathf.Min(m_CurrentHealth, m_MaxHealth);
+
+    ui_OnHealthChange?.Invoke();
+}
+#endregion
 
     private void Update()
     {

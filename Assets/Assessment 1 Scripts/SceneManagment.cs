@@ -1,27 +1,27 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections;
-using System;
-using Unity.VisualScripting;
+// using UnityEngine;
+// using UnityEngine.SceneManagement;
+// using System.Collections;
+// using System;
+// using Unity.VisualScripting;
 
-public class SceneManagment : MonoBehaviour
-{
+// public class SceneManagment : MonoBehaviour
+// {
     
-    void Start()
-    {
-        StartCoroutine(C_LoadSceneAsync(1, LoadSceneMode.Additive));
-    }
+//     void Start()
+//     {
+//         StartCoroutine(C_LoadSceneAsync(1, LoadSceneMode.Additive));
+//     }
 
-  IEnumerator C_LoadSceneAsync(int sceneIndex, LoadSceneMode sceneMode)
-    {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneIndex, sceneMode);
+//   IEnumerator C_LoadSceneAsync(int sceneIndex, LoadSceneMode sceneMode)
+//     {
+//         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneIndex, sceneMode);
 
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-            Debug.Log($"Progress: {asyncLoad.progress * 100}");
-        }
-    }
+//         while (!asyncLoad.isDone)
+//         {
+//             yield return null;
+//             Debug.Log($"Progress: {asyncLoad.progress * 100}");
+//         }
+//     }
 
-}
+// }
 
