@@ -25,7 +25,7 @@ public class Collectible : MonoBehaviour
         SoundManager.instance.PlaySound(m_CoinNoise, transform, 1f);
         if (collision.CompareTag("Player"))
         {
-            GameManager.instance.m_Score += m_Value;
+            GameManager.instance.AddScore(m_Value);
 
             Debug.Log("+" + m_Value + "Collected - " + "Score Now - " + GameManager.instance.m_Score);
         

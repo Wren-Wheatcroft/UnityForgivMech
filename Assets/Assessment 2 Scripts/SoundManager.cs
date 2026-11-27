@@ -19,7 +19,7 @@ public class SoundManager : MonoBehaviour
             instance = this;
         }
 
-        Debug.Log(m_SoundPrefab + " - Meow");
+        Debug.Log(m_SoundPrefab);
     }
 
 #region Play Sound

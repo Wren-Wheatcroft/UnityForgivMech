@@ -151,7 +151,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -165,7 +165,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -217,12 +217,12 @@ TextureImporter:
       name: SheetA_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 143
-        width: 80
-        height: 18
+        x: 16
+        y: 144
+        width: 78
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -239,12 +239,12 @@ TextureImporter:
       name: SheetA_1
       rect:
         serializedVersion: 2
-        x: 17
-        y: 159
-        width: 96
-        height: 18
+        x: 18
+        y: 160
+        width: 94
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -261,12 +261,12 @@ TextureImporter:
       name: SheetA_2
       rect:
         serializedVersion: 2
-        x: 15
-        y: 127
-        width: 50
-        height: 17
+        x: 16
+        y: 128
+        width: 48
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -283,12 +283,12 @@ TextureImporter:
       name: SheetA_3
       rect:
         serializedVersion: 2
-        x: 15
-        y: 95
-        width: 50
-        height: 33
+        x: 67
+        y: 128
+        width: 42
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -305,12 +305,12 @@ TextureImporter:
       name: SheetA_4
       rect:
         serializedVersion: 2
-        x: 66
-        y: 127
-        width: 44
-        height: 18
+        x: 112
+        y: 128
+        width: 32
+        height: 29
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -327,12 +327,12 @@ TextureImporter:
       name: SheetA_5
       rect:
         serializedVersion: 2
-        x: 111
-        y: 127
-        width: 34
-        height: 31
+        x: 155
+        y: 128
+        width: 24
+        height: 29
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -349,12 +349,12 @@ TextureImporter:
       name: SheetA_6
       rect:
         serializedVersion: 2
-        x: 154
-        y: 127
-        width: 26
+        x: 16
+        y: 96
+        width: 48
         height: 31
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -371,12 +371,12 @@ TextureImporter:
       name: SheetA_7
       rect:
         serializedVersion: 2
-        x: 63
-        y: 80
-        width: 66
-        height: 25
+        x: 64
+        y: 81
+        width: 64
+        height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -393,12 +393,12 @@ TextureImporter:
       name: SheetA_8
       rect:
         serializedVersion: 2
-        x: 143
-        y: 95
-        width: 34
-        height: 31
+        x: 144
+        y: 96
+        width: 32
+        height: 29
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -415,12 +415,12 @@ TextureImporter:
       name: SheetA_9
       rect:
         serializedVersion: 2
-        x: 151
-        y: 15
-        width: 66
-        height: 82
+        x: 152
+        y: 16
+        width: 64
+        height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -437,12 +437,12 @@ TextureImporter:
       name: SheetA_10
       rect:
         serializedVersion: 2
-        x: 16
-        y: 79
-        width: 16
-        height: 14
+        x: 17
+        y: 80
+        width: 14
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -459,12 +459,12 @@ TextureImporter:
       name: SheetA_11
       rect:
         serializedVersion: 2
-        x: 32
-        y: 79
-        width: 16
-        height: 14
+        x: 33
+        y: 80
+        width: 14
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -481,12 +481,12 @@ TextureImporter:
       name: SheetA_12
       rect:
         serializedVersion: 2
-        x: 36
-        y: 63
-        width: 13
+        x: 130
+        y: 64
+        width: 44
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -503,12 +503,12 @@ TextureImporter:
       name: SheetA_13
       rect:
         serializedVersion: 2
-        x: 49
-        y: 63
-        width: 9
-        height: 16
+        x: 2
+        y: 34
+        width: 23
+        height: 42
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -525,12 +525,12 @@ TextureImporter:
       name: SheetA_14
       rect:
         serializedVersion: 2
-        x: 71
-        y: 63
-        width: 9
-        height: 16
+        x: 23
+        y: 64
+        width: 13
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -547,12 +547,12 @@ TextureImporter:
       name: SheetA_15
       rect:
         serializedVersion: 2
-        x: 79
-        y: 63
-        width: 34
-        height: 17
+        x: 37
+        y: 64
+        width: 11
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -569,12 +569,12 @@ TextureImporter:
       name: SheetA_16
       rect:
         serializedVersion: 2
-        x: 129
-        y: 63
-        width: 46
-        height: 18
+        x: 50
+        y: 64
+        width: 7
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -591,12 +591,12 @@ TextureImporter:
       name: SheetA_17
       rect:
         serializedVersion: 2
-        x: 1
-        y: 33
-        width: 25
-        height: 44
+        x: 58
+        y: 64
+        width: 11
+        height: 10
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -613,12 +613,12 @@ TextureImporter:
       name: SheetA_18
       rect:
         serializedVersion: 2
-        x: 22
-        y: 63
-        width: 15
+        x: 72
+        y: 64
+        width: 7
         height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -635,12 +635,12 @@ TextureImporter:
       name: SheetA_19
       rect:
         serializedVersion: 2
-        x: 36
-        y: 47
-        width: 13
-        height: 16
+        x: 80
+        y: 64
+        width: 32
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -657,12 +657,12 @@ TextureImporter:
       name: SheetA_20
       rect:
         serializedVersion: 2
-        x: 49
-        y: 47
+        x: 16
+        y: 48
         width: 9
-        height: 16
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -679,12 +679,12 @@ TextureImporter:
       name: SheetA_21
       rect:
         serializedVersion: 2
-        x: 57
-        y: 63
+        x: 23
+        y: 48
         width: 13
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -701,12 +701,12 @@ TextureImporter:
       name: SheetA_22
       rect:
         serializedVersion: 2
-        x: 71
-        y: 47
-        width: 9
-        height: 16
+        x: 37
+        y: 48
+        width: 11
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -723,12 +723,12 @@ TextureImporter:
       name: SheetA_23
       rect:
         serializedVersion: 2
-        x: 79
-        y: 47
-        width: 34
-        height: 17
+        x: 50
+        y: 48
+        width: 7
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -745,12 +745,12 @@ TextureImporter:
       name: SheetA_24
       rect:
         serializedVersion: 2
-        x: 15
-        y: 47
+        x: 58
+        y: 48
         width: 11
-        height: 14
+        height: 10
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -767,12 +767,12 @@ TextureImporter:
       name: SheetA_25
       rect:
         serializedVersion: 2
-        x: 22
-        y: 47
-        width: 15
+        x: 72
+        y: 48
+        width: 7
         height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -789,12 +789,12 @@ TextureImporter:
       name: SheetA_26
       rect:
         serializedVersion: 2
-        x: 36
-        y: 31
-        width: 13
-        height: 16
+        x: 80
+        y: 48
+        width: 32
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -811,12 +811,12 @@ TextureImporter:
       name: SheetA_27
       rect:
         serializedVersion: 2
-        x: 49
-        y: 31
+        x: 16
+        y: 32
         width: 9
-        height: 16
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -833,12 +833,12 @@ TextureImporter:
       name: SheetA_28
       rect:
         serializedVersion: 2
-        x: 57
-        y: 47
+        x: 23
+        y: 32
         width: 13
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -855,12 +855,12 @@ TextureImporter:
       name: SheetA_29
       rect:
         serializedVersion: 2
-        x: 71
-        y: 31
-        width: 9
-        height: 16
+        x: 37
+        y: 32
+        width: 11
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -877,12 +877,12 @@ TextureImporter:
       name: SheetA_30
       rect:
         serializedVersion: 2
-        x: 15
-        y: 31
-        width: 11
+        x: 50
+        y: 32
+        width: 7
         height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -899,12 +899,12 @@ TextureImporter:
       name: SheetA_31
       rect:
         serializedVersion: 2
-        x: 22
-        y: 31
-        width: 15
-        height: 14
+        x: 58
+        y: 32
+        width: 11
+        height: 10
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -921,12 +921,12 @@ TextureImporter:
       name: SheetA_32
       rect:
         serializedVersion: 2
-        x: 36
-        y: 15
-        width: 13
-        height: 16
+        x: 72
+        y: 32
+        width: 7
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -943,12 +943,12 @@ TextureImporter:
       name: SheetA_33
       rect:
         serializedVersion: 2
-        x: 49
-        y: 15
-        width: 9
-        height: 16
+        x: 8
+        y: 16
+        width: 17
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -965,12 +965,12 @@ TextureImporter:
       name: SheetA_34
       rect:
         serializedVersion: 2
-        x: 57
-        y: 31
+        x: 23
+        y: 16
         width: 13
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -987,12 +987,12 @@ TextureImporter:
       name: SheetA_35
       rect:
         serializedVersion: 2
-        x: 71
-        y: 15
-        width: 9
-        height: 16
+        x: 37
+        y: 16
+        width: 11
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1009,12 +1009,12 @@ TextureImporter:
       name: SheetA_36
       rect:
         serializedVersion: 2
-        x: 7
-        y: 15
-        width: 19
+        x: 50
+        y: 16
+        width: 7
         height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1031,12 +1031,12 @@ TextureImporter:
       name: SheetA_37
       rect:
         serializedVersion: 2
-        x: 22
-        y: 15
-        width: 15
-        height: 14
+        x: 58
+        y: 16
+        width: 11
+        height: 10
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1053,12 +1053,12 @@ TextureImporter:
       name: SheetA_38
       rect:
         serializedVersion: 2
-        x: 57
-        y: 15
-        width: 13
-        height: 12
+        x: 72
+        y: 16
+        width: 7
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1075,7 +1075,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: b122f7c0520bc6f43aa011ded68e9203
     internalID: 0
     vertices: []
     indices: 
@@ -1083,7 +1083,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       SheetA_0: 3553194794068554835
       SheetA_1: -1125550155728383874

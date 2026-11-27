@@ -10,8 +10,10 @@ public class PlayerHealth : MonoBehaviour
     #region Variables!
     private SpriteRenderer m_SpriteRenderer;
     [Header("Health")]
-    [SerializeField] private int m_MaxHealth = 5;
-    [SerializeField] private int m_CurrentHealth;
+    [SerializeField] public int m_MaxHealth = 5;
+    [SerializeField] public int m_CurrentHealth;
+    public event System.Action ui_OnHealthChange;
+   
     [Header("Damage")]
     [SerializeField] private Color m_DamageColor = Color.red;
     [SerializeField] private float m_FlashDuration = 0.1f;
@@ -69,6 +71,7 @@ public class PlayerHealth : MonoBehaviour
 
         m_CurrentHealth -= Damage; 
         m_CurrentHealth = Mathf.Max(m_CurrentHealth, 0);
+        ui_OnHealthChange?.Invoke();
         SoundManager.instance.PlayRandomSound(m_DamageSoundClips, transform, 1f);
         Debug.Log("TakeDamage Was Called");
         Debug.Log("Player Health: " + m_CurrentHealth);
@@ -98,6 +101,8 @@ public class PlayerHealth : MonoBehaviour
         {
             Die();
         }
+
+        
 
 
     }
