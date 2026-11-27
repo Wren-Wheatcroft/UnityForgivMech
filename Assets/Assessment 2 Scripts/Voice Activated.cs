@@ -10,10 +10,7 @@ public class VoiceActivated : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
-        // SoundManager.instance.PlaySound(m_VoiceClip, transform, 1f);
-       
-        //  Destroy(gameObject);            
+      
         m_VoiceCoroutine = StartCoroutine(m_PlayVoiceLines());
 
         

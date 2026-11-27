@@ -12,8 +12,8 @@
         <ui:Image name="Image" style="background-image: url(&quot;project://database/Assets/Tilemap/props/Coin.png?fileID=-3338749442709606003&amp;guid=10c763cc4072c77408962a7a97873f31&amp;type=3#Coin_0&quot;); height: 32px; width: 33px; position: absolute; top: 8px; left: 3px;"/>
         <ui:Label text="0" name="CoinLabel" style="position: absolute; color: rgb(255, 255, 255); font-size: 28px; top: -1px; left: -21px;"/>
     </ui:VisualElement>
-    <ui:VisualElement name="TimerBackground" style="flex-grow: 1; position: absolute; top: 45px; height: 48px; width: 108px; left: 991px;">
-        <ui:Image name="Image" style="position: absolute; background-image: url(&quot;project://database/Assets/Tilemap/Hourglass/Inverted%20hourglass23.png?fileID=2800000&amp;guid=a2ca1b7ef927c754aafd2fdab4c81028&amp;type=3#Inverted hourglass23&quot;); height: 32px; width: 36px; top: 7px; left: 145px;"/>
-        <ui:Label text="0:00&#10;" name="TimerLabel" style="position: absolute; color: rgb(255, 255, 255); font-size: 28px; top: -2px; left: 75px;"/>
+    <ui:VisualElement name="TimerBackground" style="flex-grow: 1; position: absolute; top: 55px; height: 48px; width: 108px; left: 1070px;">
+        <ui:Image name="Image" style="position: absolute; background-image: url(&quot;project://database/Assets/Tilemap/Hourglass/Inverted%20hourglass23.png?fileID=2800000&amp;guid=a2ca1b7ef927c754aafd2fdab4c81028&amp;type=3#Inverted hourglass23&quot;); height: 32px; width: 36px; top: 1px; left: 68px;"/>
+        <ui:Label text="0:00&#10;" name="TimerLabel" style="position: absolute; color: rgb(255, 255, 255); font-size: 28px; top: -6px; left: 10px;"/>
     </ui:VisualElement>
 </ui:UXML>
