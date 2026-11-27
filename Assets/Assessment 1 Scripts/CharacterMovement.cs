@@ -90,18 +90,18 @@ private Coroutine m_GhostCoroutine;
 private RaycastHit2D[] m_CornerHits = new RaycastHit2D[5];
  private PlayerControls m_ActionMap;
 
- [Header("WallJump")]
- [SerializeField] private float m_WallJumpForce =10f;
- [SerializeField] private float m_WallJumpHorizForce = 10f;
- [SerializeField]private float m_WallCheckDistance = 0.5f;
- [SerializeField] private LayerMask m_WallLayer;
- [SerializeField] bool m_IsWallSliding;
- [SerializeField] float m_WallSlidingSpeed = 2f;
- private Transform WallCheck;
- private bool m_IsTouchingWalls;
- private int m_WallDirection;
- private bool m_IsWallJumping;
-private Coroutine m_WallJumpCoroutine;
+//  [Header("WallJump")]
+//  [SerializeField] private float m_WallJumpForce =10f;
+//  [SerializeField] private float m_WallJumpHorizForce = 10f;
+//  [SerializeField]private float m_WallCheckDistance = 0.5f;
+//  [SerializeField] private LayerMask m_WallLayer;
+//  [SerializeField] bool m_IsWallSliding;
+//  [SerializeField] float m_WallSlidingSpeed = 2f;
+//  private Transform WallCheck;
+//  private bool m_IsTouchingWalls;
+//  private int m_WallDirection;
+//  private bool m_IsWallJumping;
+// private Coroutine m_WallJumpCoroutine;
 
  
  [Header("Knockback")]
@@ -195,7 +195,7 @@ private Coroutine m_WallJumpCoroutine;
             }
         }
     }
-    #region Wall Jump
+    //#region Wall Jump
 
     // private bool CheckWall()
     // {
@@ -224,28 +224,28 @@ private Coroutine m_WallJumpCoroutine;
     //         m_WallDirection = m_SpriteRenderer.flipX ? -1:1;
     //     }
     // }
-    private void WallJump()
-    {
-        m_RB.linearVelocity = Vector2.zero;
+    // private void WallJump()
+    // {
+    //     m_RB.linearVelocity = Vector2.zero;
 
-        m_RB.linearVelocity = new Vector2(-m_WallDirection * m_WallJumpHorizForce, m_WallJumpForce);
-        m_HasJumped = true;
-        m_IsWallJumping = true;
-         m_CoyoteTimeCounter = 0f;
-         m_JumpBufferCounter = 0f;
+    //     m_RB.linearVelocity = new Vector2(-m_WallDirection * m_WallJumpHorizForce, m_WallJumpForce);
+    //     m_HasJumped = true;
+    //     m_IsWallJumping = true;
+    //      m_CoyoteTimeCounter = 0f;
+    //      m_JumpBufferCounter = 0f;
 
-        SoundManager.instance.PlayRandomSound(m_JumpAudioClips, transform, 1f);
-        m_WallJumpCoroutine = StartCoroutine(WallJumpWait());
-         m_IsGrounded = false ;
-         m_HasJumped = true;
+    //     SoundManager.instance.PlayRandomSound(m_JumpAudioClips, transform, 1f);
+    //     m_WallJumpCoroutine = StartCoroutine(WallJumpWait());
+    //      m_IsGrounded = false ;
+    //      m_HasJumped = true;
 
-    }
-    private IEnumerator WallJumpWait()
-    {
-        yield return new WaitForSeconds(0.25f);
-        m_IsWallJumping = false;
-    }
-    #endregion
+    // }
+    // private IEnumerator WallJumpWait()
+    // {
+    //     yield return new WaitForSeconds(0.25f);
+    //     m_IsWallJumping = false;
+    // }
+    // #endregion
 
 
     #endregion
@@ -282,11 +282,11 @@ private Coroutine m_WallJumpCoroutine;
         m_JumpBufferCounter = m_JumpBufferTime;
         //CheckWall();
 
-        if(m_IsTouchingWalls && !m_IsGrounded)
-        {
-            WallJump();
-        }
-        else if (m_IsGrounded || m_CoyoteTimeCounter > 0f && m_JumpCounter <= 0f) 
+        // if(m_IsTouchingWalls && !m_IsGrounded)
+        // {
+        //     //WallJump();
+        // }
+        if (m_IsGrounded || m_CoyoteTimeCounter > 0f && m_JumpCounter <= 0f) 
         {
             Jump();
         }
@@ -472,7 +472,7 @@ private Coroutine m_WallJumpCoroutine;
         {
            Jump();
         }
-        else if (m_JumpBufferCounter > 0f && m_IsWallJumping && ( m_IsGrounded || m_CoyoteTimeCounter > 0f))
+        else if (m_JumpBufferCounter > 0f && ( m_IsGrounded || m_CoyoteTimeCounter > 0f))
 #endregion
         if (m_IsGrounded)
         {
@@ -505,7 +505,7 @@ private Coroutine m_WallJumpCoroutine;
     m_Animator.SetFloat("Speed", Mathf.Abs(m_InMove));
     m_Animator.SetFloat("YVelocity", m_RB.linearVelocityY);
     m_Animator.SetBool("IsGrounded", m_IsGrounded);
-    m_Animator.SetBool("IsWallJumping", m_IsWallJumping);
+    //m_Animator.SetBool("IsWallJumping", m_IsWallJumping);
     m_Animator.SetBool("IsDashing", m_IsDashing);
 #endregion
 
